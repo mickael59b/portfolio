@@ -1,0 +1,9 @@
+.fw-500 {
+    font-weight: 500 !important;
+}
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
