@@ -1,17 +1,59 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
+import '../assets/css/header.css';
 const Header = () => {
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
   // Vérifie si l'utilisateur est connecté
   const isAuthenticated = !!localStorage.getItem('token');
+
+  // Récupère les informations de l'utilisateur
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+
+      try {
+        const response = await fetch('http://localhost:5000/api/clients/getClientInfo', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+        if (response.ok) {
+          setUser(data); // Enregistre les données utilisateur (nom, avatar, email)
+        } else {
+          console.error('Erreur:', data.message);
+        }
+      } catch (error) {
+        console.error('Erreur de connexion au serveur:', error);
+      }
+    };
+
+    if (isAuthenticated) {
+      fetchUserInfo();
+    }
+  }, [isAuthenticated]);
 
   // Gère la déconnexion
   const handleLogout = () => {
     localStorage.removeItem('token'); // Supprime le token
     navigate('/login'); // Redirige vers la page de connexion
   };
+
+  // Affichage d'un loader si les données utilisateur ne sont pas encore récupérées
+  if (!user) {
+    return (
+      <nav className="navbar navbar-expand-lg navbar-light bg-white py-3 border-bottom">
+        <div className="container px-5">
+          <span className="navbar-brand">
+            Chargement...
+          </span>
+        </div>
+      </nav>
+    );
+  }
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-white py-3 border-bottom">
@@ -62,29 +104,72 @@ const Header = () => {
               </Link>
             </li>
           </ul>
-          {isAuthenticated ? (
-            <button
-              className="btn fw-500 ms-lg-4 btn-danger"
-              onClick={handleLogout}
-            >
-              Déconnexion
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="feather feather-log-out ms-2"
+
+          {isAuthenticated && user ? (
+            <li className="nav-item dropdown no-caret dropdown-user me-3 me-lg-4">
+              <a
+                className="btn btn-icon btn-transparent-dark dropdown-toggle"
+                id="navbarDropdownUserImage"
+                href="javascript:void(0);"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
               >
-                <path d="M9 21V16.2C9 15.1 9.9 14 11 14h1"></path>
-                <polyline points="17 17 21 12 17 7"></polyline>
-                <line x1="21" y1="12" x2="9" y2="12"></line>
-              </svg>
-            </button>
+                <img className="img-fluid" src={user.avatar || 'https://via.placeholder.com/40'} alt="Avatar" />
+              </a>
+              <div className="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownUserImage">
+                <h6 className="dropdown-header d-flex align-items-center">
+                  <img className="dropdown-user-img" src={user.avatar || 'https://via.placeholder.com/40'} alt="Avatar" />
+                  <div className="dropdown-user-details">
+                    <div className="dropdown-user-details-name">{user.name}</div>
+                    <div className="dropdown-user-details-email">{user.email}</div>
+                  </div>
+                </h6>
+                <div className="dropdown-divider"></div>
+                <a className="dropdown-item" href="#!">
+                  <div className="dropdown-item-icon">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="feather feather-settings"
+                    >
+                      <circle cx="12" cy="12" r="3"></circle>
+                      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                  </div>
+                  Account
+                </a>
+                <a className="dropdown-item" href="#!" onClick={handleLogout}>
+                  <div className="dropdown-item-icon">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="feather feather-log-out"
+                    >
+                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                      <polyline points="16 17 21 12 16 7"></polyline>
+                      <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                  </div>
+                  Logout
+                </a>
+              </div>
+            </li>
           ) : (
             <Link className="btn fw-500 ms-lg-4 btn-primary" to="/login">
               Connexion
@@ -113,4 +198,3 @@ const Header = () => {
 };
 
 export default Header;
-

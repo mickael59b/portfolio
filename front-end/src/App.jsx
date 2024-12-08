@@ -7,13 +7,15 @@ import AppRoutes from './routes/AppRoutes'; // Importation des routes
 
 const App = () => {
   return (
-    <AuthProvider>
-      <Router>
+    // Le Router doit englober tous les composants qui utilisent react-router
+    <Router>
+      {/* AuthProvider peut maintenant utiliser useNavigate sans problème */}
+      <AuthProvider>
         <Header />
         <AppRoutes /> {/* Utilisation des routes depuis AppRoutes.jsx */}
         <Footer />
-      </Router>
-    </AuthProvider>
+      </AuthProvider>
+    </Router>
   );
 };
 

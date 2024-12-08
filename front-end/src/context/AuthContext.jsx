@@ -1,28 +1,32 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-// Créer le contexte
 const AuthContext = createContext();
 
-// Fournisseur du contexte
+export const useAuth = () => useContext(AuthContext);
+
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate = useNavigate();
 
+  // Vérification de l'authentification au démarrage
   useEffect(() => {
-    // Vérifier si un token est stocké dans localStorage
     const token = localStorage.getItem('token');
     if (token) {
-      setIsAuthenticated(true);  // Utilisateur authentifié si le token existe
+      setIsAuthenticated(true);
     }
   }, []);
 
   const login = (token) => {
-    localStorage.setItem('token', token);  // Stocke le token dans localStorage
-    setIsAuthenticated(true);  // Met à jour l'état d'authentification
+    localStorage.setItem('token', token);
+    setIsAuthenticated(true);
+    navigate('/dashboard'); // Redirection vers le dashboard après connexion
   };
 
   const logout = () => {
-    localStorage.removeItem('token');  // Supprime le token du localStorage
-    setIsAuthenticated(false);  // Met à jour l'état d'authentification
+    localStorage.removeItem('token');
+    setIsAuthenticated(false);
+    navigate('/login'); // Redirection vers la page de connexion après déconnexion
   };
 
   return (
@@ -31,7 +35,3 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
-
-// Hook personnalisé pour accéder facilement au contexte
-export const useAuth = () => useContext(AuthContext);
-

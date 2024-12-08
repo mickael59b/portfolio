@@ -5,91 +5,60 @@ import axios from 'axios';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // Fonction de gestion de la connexion
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-    setLoading(true);
 
     try {
-      // Appel API pour vérifier les informations d'identification
-      const response = await axios.post('http://localhost:5000/api/clients/login', {
-        email,
-        password,
-      });
+      // Envoi des données de connexion à l'API
+      const response = await axios.post('http://localhost:5000/api/clients/login', { email, password });
 
-      // Stockage du jeton dans localStorage
-      const { token } = response.data;
-      localStorage.setItem('token', token);
-      navigate('/dashboard'); // Redirection vers le dashboard
-    } catch (err) {
-      if (err.response && err.response.data) {
-        // Erreur provenant de l'API
-        setError(err.response.data.message || 'Erreur lors de la connexion.');
-      } else {
-        // Erreur réseau ou autre
-        setError('Une erreur s’est produite. Veuillez réessayer.');
+      const { token, user } = response.data; // Réponse avec le token et les informations utilisateur
+
+      if (token) {
+        // Stocker le token et les informations utilisateur dans le localStorage
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));  // Sauvegarder les infos utilisateur
+
+        // Rediriger vers le dashboard
+        navigate('/dashboard');
       }
-    } finally {
-      setLoading(false);
+    } catch (err) {
+      setError('Email ou mot de passe incorrect');
     }
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
-      <div className="card p-4 shadow" style={{ width: '400px' }}>
-        <h3 className="card-title text-center mb-4">Connexion</h3>
-        {error && (
-          <div className="alert alert-danger text-center" role="alert">
-            {error}
-          </div>
-        )}
-        <form onSubmit={handleLogin}>
-          <div className="mb-3">
-            <label htmlFor="email" className="form-label">
-              Adresse Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              className="form-control"
-              placeholder="Entrez votre email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="password" className="form-label">
-              Mot de passe
-            </label>
-            <input
-              type="password"
-              id="password"
-              className="form-control"
-              placeholder="Entrez votre mot de passe"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          <button type="submit" className="btn btn-primary w-100" disabled={loading}>
-            {loading ? 'Connexion...' : 'Se connecter'}
-          </button>
-        </form>
-        <div className="mt-3 text-center">
-          <small>
-            Pas encore de compte ?{' '}
-            <a href="/register" className="text-primary">
-              Inscrivez-vous
-            </a>
-          </small>
+    <div className="container">
+      <h2>Se connecter</h2>
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <label htmlFor="email" className="form-label">Email</label>
+          <input
+            type="email"
+            className="form-control"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
         </div>
-      </div>
+        <div className="mb-3">
+          <label htmlFor="password" className="form-label">Mot de passe</label>
+          <input
+            type="password"
+            className="form-control"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+        {error && <div className="text-danger">{error}</div>}
+        <button type="submit" className="btn btn-primary">Se connecter</button>
+      </form>
     </div>
   );
 };

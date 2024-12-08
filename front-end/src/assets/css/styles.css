@@ -1,3 +1,7 @@
+a {
+  color: var(--bs-link-color);
+  text-decoration: none !important;
+}
 .alert{
   position: absolute;
   top:74px;
@@ -8,5 +12,4 @@
     bottom: 0;
     width: 100%;
     z-index: 1000;
-  }
-  
+}
