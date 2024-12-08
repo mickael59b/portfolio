@@ -25,8 +25,6 @@ const Login = () => {
       // Stockage du jeton dans localStorage
       const { token } = response.data;
       localStorage.setItem('token', token);
-
-      alert('Connexion réussie !');
       navigate('/dashboard'); // Redirection vers le dashboard
     } catch (err) {
       if (err.response && err.response.data) {
