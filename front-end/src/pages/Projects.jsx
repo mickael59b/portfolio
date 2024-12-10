@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
-import axios from "axios";
-import '../assets/css/projets.css';
+import { obtenirTousLesProjets } from "../services/apiProjets"; // Import depuis apiProjets.js
+import "../assets/css/projets.css";
 
 // Composant pour afficher chaque projet
 const ProjectItem = ({ project }) => (
@@ -25,7 +25,7 @@ const ProjectItem = ({ project }) => (
             <i className="bi bi-zoom-in"></i>
           </a>
           <a
-            href={`/project-details/${project.id}`}  // Lien dynamique vers une page de détails de projet
+            href={`/project-details/${project.id}`}
             title="Plus de détails"
             className="details-link"
             aria-label={`Plus de détails sur le projet ${project.name}`}
@@ -44,27 +44,27 @@ const Projects = () => {
   const [activeFilter, setActiveFilter] = useState("*");
   const [loading, setLoading] = useState(true);
 
-  // Récupérer les projets et les catégories depuis l'API
+  // Récupération des projets et des catégories
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/projects");
-        const projectsData = response.data || [];
+        const projectsData = await obtenirTousLesProjets();
+        console.log("Projets récupérés :", projectsData); // Vérification des données
+
         setProjects(projectsData);
 
-        // Extraire les catégories uniques
+        // Extraction des catégories uniques
         const uniqueCategories = [
           ...new Set(
             projectsData
               .map((project) => project.category)
-              .filter((category) => category) // Filtrer les catégories nulles ou vides
+              .filter((category) => category) // Ignore les catégories nulles
           ),
         ];
         setCategories(uniqueCategories);
       } catch (error) {
-        // Afficher l'erreur plus détaillée
-        console.error("Erreur lors de la récupération des projets:", error.response || error.message);
-        setProjects([]);  // Assurez-vous de gérer l'état de l'erreur proprement
+        console.error("Erreur lors de la récupération des projets :", error.message);
+        setProjects([]); // Gère les erreurs proprement
       } finally {
         setLoading(false);
       }
@@ -73,18 +73,16 @@ const Projects = () => {
     fetchProjects();
   }, []);
 
-  // Mémoïsation du filtrage des projets
+  // Filtrage des projets
   const filteredProjects = useMemo(() => {
     return activeFilter === "*"
       ? projects
       : projects.filter((project) => project.category === activeFilter);
   }, [projects, activeFilter]);
 
-  // Gérer le changement de filtre
+  // Gestion des filtres
   const handleFilterChange = (filter) => {
-    setLoading(true);
     setActiveFilter(filter);
-    setTimeout(() => setLoading(false), 300); // Simule un temps de chargement
   };
 
   return (
@@ -133,4 +131,3 @@ const Projects = () => {
 };
 
 export default Projects;
-

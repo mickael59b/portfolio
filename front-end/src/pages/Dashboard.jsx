@@ -5,10 +5,6 @@ import statisticsImage from '../assets/images/statistics.svg';  // Importation d
 const Dashboard = () => {
   const { isAuthenticated, logout } = useAuth();
 
-  if (!isAuthenticated) {
-    return <div>Vous devez être connecté pour accéder au tableau de bord.</div>;
-  }
-
   return (
     <div className="container my-5">
       <div className="row">

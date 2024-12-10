@@ -1,3 +1,8 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%; /* S'assurer que la hauteur de la page est complète */
+}
 a {
   color: var(--bs-link-color);
   text-decoration: none !important;

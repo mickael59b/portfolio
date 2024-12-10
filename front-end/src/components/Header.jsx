@@ -1,46 +1,35 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { getClientInfo } from '../services/apiClient'; // Importez la fonction
 import '../assets/css/header.css';
 
 const Header = () => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
-  // Vérifie si l'utilisateur est connecté
   const isAuthenticated = !!localStorage.getItem('token');
 
-  // Récupère les informations de l'utilisateur
   useEffect(() => {
-    const fetchUserInfo = async () => {
+    const fetchUserData = async () => {
       const token = localStorage.getItem('token');
       if (!token) return;
 
       try {
-        const response = await fetch('http://localhost:5000/api/clients/getClientInfo', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const data = await response.json();
-        if (response.ok) {
-          setUser(data); // Enregistre les données utilisateur (nom, avatar, email)
-        } else {
-          console.error('Erreur:', data.message);
-        }
+        const userData = await getClientInfo(token);
+        setUser(userData);
       } catch (error) {
-        console.error('Erreur de connexion au serveur:', error);
+        console.error('Error:', error.message);
       }
     };
 
     if (isAuthenticated) {
-      fetchUserInfo();
+      fetchUserData();
     }
   }, [isAuthenticated]);
 
-  // Gère la déconnexion
   const handleLogout = () => {
-    localStorage.removeItem('token'); // Supprime le token
-    navigate('/login'); // Redirige vers la page de connexion
+    localStorage.removeItem('token');
+    navigate('/login');
   };
 
   return (
@@ -108,17 +97,27 @@ const Header = () => {
                   width="32"
                   height="32"
                   className="avatar rounded-2"
-                /> <user className="name">{user.name}</user>
+                />{' '}
+                <user className="name">{user.name}</user>
               </a>
               <ul className="dropdown-menu text-small" aria-labelledby="dropdownUser1">
                 <li>
-                  <a className="dropdown-item" href="#">New project...</a>
+                  <a className='dropdown-item' href='/dashboard'>Compte</a>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#">Settings</a>
+                  <a className="dropdown-item" href="#">
+                    New project...
+                  </a>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#">Profile</a>
+                  <a className="dropdown-item" href="#">
+                    Settings
+                  </a>
+                </li>
+                <li>
+                  <a className="dropdown-item" href="#">
+                    Profile
+                  </a>
                 </li>
                 <li>
                   <hr className="dropdown-divider" />
