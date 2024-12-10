@@ -9,5 +9,10 @@
     align-items: center;
     justify-content: center;
 }
+.btn i {
+    vertical-align: middle;
+    font-size: 1em; /* Ajustez selon la taille de vos textes */
+    line-height: 1;
+  }
 
 

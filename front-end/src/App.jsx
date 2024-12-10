@@ -12,8 +12,8 @@ const App = () => {
     <Router>
       {/* AuthProvider peut maintenant utiliser useNavigate sans problème */}
       <AuthProvider>
-        <Feedback />
         <Header />
+        <Feedback />
         <AppRoutes /> {/* Utilisation des routes depuis AppRoutes.jsx */}
         <Footer />
       </AuthProvider>
