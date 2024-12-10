@@ -5,6 +5,7 @@ import About from '../pages/About';
 import Projects from '../pages/Projects';
 import Contact from '../pages/Contact';
 import Login from '../pages/Login';
+import Register from '../pages/Register';
 import Dashboard from '../pages/Dashboard';
 import PrivateRoute from './PrivateRoute';
 
@@ -16,6 +17,7 @@ const AppRoutes = () => {
       <Route path="/projects" element={<Projects />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
       <Route
         path="/dashboard"
         element={

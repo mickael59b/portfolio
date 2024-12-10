@@ -3,6 +3,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext'; // Import du fournisseur de contexte
 import Header from './components/Header';
 import Footer from './components/Footer';
+import Feedback from './components/Feedback';
 import AppRoutes from './routes/AppRoutes'; // Importation des routes
 
 const App = () => {
@@ -11,6 +12,7 @@ const App = () => {
     <Router>
       {/* AuthProvider peut maintenant utiliser useNavigate sans problème */}
       <AuthProvider>
+        <Feedback />
         <Header />
         <AppRoutes /> {/* Utilisation des routes depuis AppRoutes.jsx */}
         <Footer />

@@ -58,7 +58,7 @@ router.post('/login', async (req, res) => {
       user: {
         name: client.name,
         email: client.email,
-        avatar: client.avatar || 'https://via.placeholder.com/150', // Avatar par défaut si non défini
+        avatar: client.avatar || 'https://acti-informatique.com/web-core/uploads/avatar/default-avatar.png', // Avatar par défaut si non défini
       }
     });
   } catch (error) {
@@ -79,7 +79,7 @@ router.get('/getClientInfo', authMiddleware, async (req, res) => {
       id: client._id,
       name: client.name,
       email: client.email,
-      avatar: client.avatar || 'https://via.placeholder.com/150', // Ajouter un avatar par défaut si non défini
+      avatar: client.avatar || 'https://acti-informatique.com/web-core/uploads/avatar/default-avatar.png', // Ajouter un avatar par défaut si non défini
     });
   } catch (error) {
     console.error(error);

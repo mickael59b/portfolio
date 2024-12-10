@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../assets/css/header.css';
+
 const Header = () => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
@@ -41,19 +42,6 @@ const Header = () => {
     localStorage.removeItem('token'); // Supprime le token
     navigate('/login'); // Redirige vers la page de connexion
   };
-
-  // Affichage d'un loader si les données utilisateur ne sont pas encore récupérées
-  if (!user) {
-    return (
-      <nav className="navbar navbar-expand-lg navbar-light bg-white py-3 border-bottom">
-        <div className="container px-5">
-          <span className="navbar-brand">
-            Chargement...
-          </span>
-        </div>
-      </nav>
-    );
-  }
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-white py-3 border-bottom">
@@ -106,70 +94,42 @@ const Header = () => {
           </ul>
 
           {isAuthenticated && user ? (
-            <li className="nav-item dropdown no-caret dropdown-user me-3 me-lg-4">
+            <div className="dropdown text-end">
               <a
-                className="btn btn-icon btn-transparent-dark dropdown-toggle"
-                id="navbarDropdownUserImage"
-                href="javascript:void(0);"
-                role="button"
+                href="#"
+                className="d-block link-dark text-decoration-none dropdown-toggle"
+                id="dropdownUser1"
                 data-bs-toggle="dropdown"
-                aria-haspopup="true"
                 aria-expanded="false"
               >
-                <img className="img-fluid" src={user.avatar || 'https://via.placeholder.com/40'} alt="Avatar" />
+                <img
+                  src={user.avatar || 'https://acti-informatique.com/web-core/uploads/avatar/default-avatar.png'}
+                  alt="Avatar"
+                  width="32"
+                  height="32"
+                  className="avatar rounded-2"
+                /> <user className="name">{user.name}</user>
               </a>
-              <div className="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownUserImage">
-                <h6 className="dropdown-header d-flex align-items-center">
-                  <img className="dropdown-user-img" src={user.avatar || 'https://via.placeholder.com/40'} alt="Avatar" />
-                  <div className="dropdown-user-details">
-                    <div className="dropdown-user-details-name">{user.name}</div>
-                    <div className="dropdown-user-details-email">{user.email}</div>
-                  </div>
-                </h6>
-                <div className="dropdown-divider"></div>
-                <a className="dropdown-item" href="#!">
-                  <div className="dropdown-item-icon">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="feather feather-settings"
-                    >
-                      <circle cx="12" cy="12" r="3"></circle>
-                      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                    </svg>
-                  </div>
-                  Account
-                </a>
-                <a className="dropdown-item" href="#!" onClick={handleLogout}>
-                  <div className="dropdown-item-icon">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="feather feather-log-out"
-                    >
-                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                      <polyline points="16 17 21 12 16 7"></polyline>
-                      <line x1="21" y1="12" x2="9" y2="12"></line>
-                    </svg>
-                  </div>
-                  Logout
-                </a>
-              </div>
-            </li>
+              <ul className="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+                <li>
+                  <a className="dropdown-item" href="#">New project...</a>
+                </li>
+                <li>
+                  <a className="dropdown-item" href="#">Settings</a>
+                </li>
+                <li>
+                  <a className="dropdown-item" href="#">Profile</a>
+                </li>
+                <li>
+                  <hr className="dropdown-divider" />
+                </li>
+                <li>
+                  <a className="dropdown-item" href="#" onClick={handleLogout}>
+                    Sign out
+                  </a>
+                </li>
+              </ul>
+            </div>
           ) : (
             <Link className="btn fw-500 ms-lg-4 btn-primary" to="/login">
               Connexion

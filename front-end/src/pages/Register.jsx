@@ -33,8 +33,10 @@ const Register = () => {
   };
 
   return (
-    <div className="container my-5">
-      <div className="row justify-content-center">
+    <section id="register">
+    <div className="container">
+      <div className="row justify-content-center mt-5">
+        <div className="col-md-6"></div>
         <div className="col-md-6">
           <div className="card">
             <div className="card-body">
@@ -106,6 +108,7 @@ const Register = () => {
         </div>
       </div>
     </div>
+    </section>
   );
 };
 
