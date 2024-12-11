@@ -1,22 +1,63 @@
-import React from 'react';
-import { useAuth } from '../context/AuthContext';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Pour rediriger après déconnexion
 import statisticsImage from '../assets/images/statistics.svg';  // Importation de l'image
+import { getClientInfo } from '../services/apiClient'; // Assurez-vous d'avoir la fonction qui récupère les données de l'utilisateur connecté
 
 const Dashboard = () => {
-  const { isAuthenticated, logout } = useAuth();
+  const [userInfo, setUserInfo] = useState(null);
+  const navigate = useNavigate();
+
+  // Charger les informations de l'utilisateur lors du rendu du composant
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (token) {
+          const data = await getClientInfo(token); // Utilisez votre fonction pour récupérer les données utilisateur
+          setUserInfo(data);
+        } else {
+          navigate('/login'); // Rediriger si pas de token
+        }
+      } catch (error) {
+        console.error('Error fetching user info:', error);
+        navigate('/login');
+      }
+    };
+    fetchUserInfo();
+  }, [navigate]);
+
+  // Déconnexion de l'utilisateur
+  const logout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
+
+  // Si l'utilisateur n'est pas encore chargé, afficher un message de chargement
+  if (!userInfo) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="container my-5">
       <div className="row">
-        {/* Sidebar - Menu à gauche */}
+        {/* Sidebar - Menu dynamique en fonction du rôle */}
         <div className="col-md-3 col-lg-2 p-4 bg-light">
           <h3 className="text-primary">Menu</h3>
           <ul className="list-unstyled">
             <li><a href="#!" className="btn btn-link text-dark">Tableau de bord</a></li>
-            <li><a href="#!" className="btn btn-link text-dark">Ventes</a></li>
-            <li><a href="#!" className="btn btn-link text-dark">Produits</a></li>
-            <li><a href="#!" className="btn btn-link text-dark">Rapports</a></li>
-            <li><a href="#!" className="btn btn-link text-dark">Paramètres</a></li>
+            {userInfo.role === 'admin' && (
+              <>
+                <li><a href="#!" className="btn btn-link text-dark">Gestion des utilisateurs</a></li>
+                <li><a href="#!" className="btn btn-link text-dark">Paramètres</a></li>
+                <li><a href="#!" className="btn btn-link text-dark">Rapports</a></li>
+              </>
+            )}
+            {userInfo.role === 'client' && (
+              <>
+                <li><a href="#!" className="btn btn-link text-dark">Profil</a></li>
+                <li><a href="#!" className="btn btn-link text-dark">Paramètres</a></li>
+              </>
+            )}
           </ul>
           <hr />
           <button className="btn btn-danger w-100" onClick={logout}>Se déconnecter</button>
@@ -30,12 +71,12 @@ const Dashboard = () => {
               <div className="card-body p-5">
                 <div className="row align-items-center justify-content-between">
                   <div className="col">
-                    <h2 className="text-primary">Welcome back, your dashboard is ready!</h2>
+                    <h2 className="text-primary">Bienvenue, votre tableau de bord est prêt !</h2>
                     <p className="text-gray-700">
-                      Great job, your affiliate dashboard is ready to go! You can view sales, generate links, prepare coupons, and download affiliate reports using this dashboard.
+                      Bonjour {userInfo.name}, voici votre tableau de bord. Utilisez les sections de gauche pour naviguer.
                     </p>
                     <a className="btn btn-primary p-3" href="#!">
-                      Get Started
+                      Commencer
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -54,7 +95,7 @@ const Dashboard = () => {
                     </a>
                   </div>
                   <div className="col d-none d-lg-block mt-xxl-n4">
-                    {/* Utilisation de l'image importée */}
+                    {/* Image d'illustration */}
                     <img className="img-fluid px-xl-4 mt-xxl-n5" src={statisticsImage} alt="Dashboard Illustration" />
                   </div>
                 </div>

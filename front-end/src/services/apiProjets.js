@@ -10,8 +10,20 @@ export const obtenirTousLesProjets = async () => {
     console.log("Données récupérées :", response.data); // Vérification des données
     return response.data; // Retourne les données des projets
   } catch (error) {
-    console.error("Erreur lors de la récupération des projets :", error.response || error.message);
-    throw error;
+    // Gestion des erreurs de manière plus complète
+    if (error.response) {
+      // Erreur provenant du serveur (par exemple, 404 ou 500)
+      console.error("Erreur serveur :", error.response.data);
+      throw new Error(`Erreur du serveur : ${error.response.status} - ${error.response.data}`);
+    } else if (error.request) {
+      // Erreur réseau (par exemple, le serveur n'est pas accessible)
+      console.error("Erreur réseau :", error.request);
+      throw new Error("Erreur réseau : Impossible de joindre le serveur.");
+    } else {
+      // Autres types d'erreurs
+      console.error("Erreur inconnue :", error.message);
+      throw new Error(`Erreur inconnue : ${error.message}`);
+    }
   }
 };
 
@@ -21,10 +33,15 @@ export const obtenirProjetParId = async (id) => {
     const response = await axios.get(`${API_BASE_URL}/${id}`);
     return response.data;
   } catch (error) {
-    console.error(`Erreur lors de la récupération du projet avec ID ${id} :`, error.response || error.message);
-    throw error;
+    if (error.response) {
+      console.error(`Erreur lors de la récupération du projet avec ID ${id}:`, error.response.data);
+      throw new Error(`Erreur serveur : ${error.response.status} - ${error.response.data}`);
+    } else if (error.request) {
+      console.error("Erreur réseau :", error.request);
+      throw new Error("Erreur réseau : Impossible de joindre le serveur.");
+    } else {
+      console.error("Erreur inconnue :", error.message);
+      throw new Error(`Erreur inconnue : ${error.message}`);
+    }
   }
 };
-
-// Autres fonctions (créer, mettre à jour, supprimer) ici si nécessaire...
-

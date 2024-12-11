@@ -15,24 +15,36 @@ const passwordValidation = (password) => {
 router.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
 
+  // Validation de l'email
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
     return res.status(400).json({ message: 'Email invalide' });
   }
 
+  // Vérification si l'email est déjà utilisé
   const existingClient = await Client.findOne({ email });
   if (existingClient) {
     return res.status(400).json({ message: 'Cet email est déjà utilisé.' });
   }
 
+  // Validation du mot de passe
   if (!passwordValidation(password)) {
     return res.status(400).json({ message: 'Le mot de passe doit contenir au moins 8 caractères, une lettre majuscule, une lettre minuscule et un chiffre.' });
   }
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
-    const client = new Client({ name, email, password: hashedPassword });
-    await client.save();
+
+    // Création du nouveau client avec le rôle et l'avatar par défaut
+    const client = new Client({
+      name,
+      email,
+      password: hashedPassword,
+      role: 'client',  // Rôle par défaut
+      avatar: 'https://acti-informatique.com/web-core/uploads/avatar/default-avatar.png', // Avatar par défaut
+    });
+
+    await client.save();  // Sauvegarde du client dans la base de données
     res.status(201).json({ message: 'Client enregistré avec succès!' });
   } catch (error) {
     console.error(error);
@@ -59,6 +71,7 @@ router.post('/login', async (req, res) => {
         name: client.name,
         email: client.email,
         avatar: client.avatar || 'https://acti-informatique.com/web-core/uploads/avatar/default-avatar.png', // Avatar par défaut si non défini
+        role: client.role, // Inclure le rôle
       }
     });
   } catch (error) {
@@ -79,7 +92,8 @@ router.get('/getClientInfo', authMiddleware, async (req, res) => {
       id: client._id,
       name: client.name,
       email: client.email,
-      avatar: client.avatar || 'https://acti-informatique.com/web-core/uploads/avatar/default-avatar.png', // Ajouter un avatar par défaut si non défini
+      avatar: client.avatar || 'https://acti-informatique.com/web-core/uploads/avatar/default-avatar.png', // Avatar par défaut si non défini
+      role: client.role,  // Renvoyer le rôle
     });
   } catch (error) {
     console.error(error);

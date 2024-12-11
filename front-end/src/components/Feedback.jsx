@@ -27,9 +27,9 @@ const Feedback = () => {
   return (
     <div>
       {/* Bouton pour ouvrir le popup */}
-      <button className="feedback-btn" onClick={() => setIsOpen(true)}>
+      <div className="feedback-btn" onClick={() => setIsOpen(true)}>
         Feedback
-      </button>
+      </div>
 
       {/* Popup de feedback */}
       {isOpen && (

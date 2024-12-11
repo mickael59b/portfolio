@@ -1,62 +1,28 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { obtenirTousLesProjets } from "../services/apiProjets"; // Import depuis apiProjets.js
-import "../assets/css/projets.css";
-
-// Composant pour afficher chaque projet
-const ProjectItem = ({ project }) => (
-  <div className={`col-lg-4 col-md-6 projects-item isotope-item ${project.category}`}>
-    <div className="projects-content h-100">
-      <img
-        src={project.image}
-        className="img-fluid"
-        alt={`Aperçu du projet ${project.name}`}
-      />
-      <div className="projects-info">
-        <h4>{project.name}</h4>
-        <p>{project.description}</p>
-        <div>
-          <a
-            href={project.image}
-            title={`Aperçu du projet ${project.name}`}
-            data-gallery="portfolio-gallery"
-            className="glightbox preview-link"
-            aria-label={`Voir l'aperçu de ${project.name}`}
-          >
-            <i className="bi bi-zoom-in"></i>
-          </a>
-          <a
-            href={`/project-details/${project.id}`}
-            title="Plus de détails"
-            className="details-link"
-            aria-label={`Plus de détails sur le projet ${project.name}`}
-          >
-            <i className="bi bi-link-45deg"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-);
+import { obtenirTousLesProjets } from "../services/apiProjets"; // Importation de la fonction pour récupérer les projets
+import ProjectItem from "../components/ProjectItem"; // Importation du composant ProjectItem
+import "../assets/css/projets.css"; // CSS pour la mise en forme
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
   const [categories, setCategories] = useState([]);
   const [activeFilter, setActiveFilter] = useState("*");
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1); // Page courante
+  const [projectsPerPage] = useState(9); // Nombre de projets par page
 
-  // Récupération des projets et des catégories
+  // Récupérer les projets et les catégories
   useEffect(() => {
     const fetchProjects = async () => {
       try {
         const projectsData = await obtenirTousLesProjets();
         console.log("Projets récupérés :", projectsData); // Vérification des données
-
-        setProjects(projectsData);
-
+        setProjects(projectsData.projects); // Accédez à la clé `projects`
+        
         // Extraction des catégories uniques
         const uniqueCategories = [
           ...new Set(
-            projectsData
+            projectsData.projects
               .map((project) => project.category)
               .filter((category) => category) // Ignore les catégories nulles
           ),
@@ -80,9 +46,23 @@ const Projects = () => {
       : projects.filter((project) => project.category === activeFilter);
   }, [projects, activeFilter]);
 
+  // Calcul des projets à afficher pour la page courante
+  const indexOfLastProject = currentPage * projectsPerPage;
+  const indexOfFirstProject = indexOfLastProject - projectsPerPage;
+  const currentProjects = filteredProjects.slice(indexOfFirstProject, indexOfLastProject);
+
+  // Calcul du nombre total de pages
+  const totalPages = Math.ceil(filteredProjects.length / projectsPerPage);
+
   // Gestion des filtres
   const handleFilterChange = (filter) => {
     setActiveFilter(filter);
+    setCurrentPage(1); // Réinitialiser à la première page lors d'un changement de filtre
+  };
+
+  // Gestion du changement de page
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -117,13 +97,45 @@ const Projects = () => {
         <div className="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
           {loading ? (
             <p className="loading">Chargement des projets...</p>
-          ) : filteredProjects.length > 0 ? (
-            filteredProjects.map((project, index) => (
+          ) : currentProjects.length > 0 ? (
+            currentProjects.map((project, index) => (
               <ProjectItem key={index} project={project} />
             ))
           ) : (
             <p className="no-projects">Aucun projet trouvé pour cette catégorie.</p>
           )}
+        </div>
+
+        {/* Pagination */}
+        <div className="pagination">
+          <ul className="pagination-list">
+            {/* Page précédente */}
+            <li
+              className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+              onClick={() => handlePageChange(currentPage - 1)}
+            >
+              <button className="page-link">Précédent</button>
+            </li>
+
+            {/* Numéros de page */}
+            {[...Array(totalPages)].map((_, index) => (
+              <li
+                key={index}
+                className={`page-item ${currentPage === index + 1 ? "active" : ""}`}
+                onClick={() => handlePageChange(index + 1)}
+              >
+                <button className="page-link">{index + 1}</button>
+              </li>
+            ))}
+
+            {/* Page suivante */}
+            <li
+              className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}
+              onClick={() => handlePageChange(currentPage + 1)}
+            >
+              <button className="page-link">Suivant</button>
+            </li>
+          </ul>
         </div>
       </div>
     </section>

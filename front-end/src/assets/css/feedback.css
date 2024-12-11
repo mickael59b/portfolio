@@ -13,27 +13,29 @@
   
   /* Styles pour le bouton "Feedback" */
   .feedback-btn {
-    position: fixed; /* Le bouton doit être fixé par rapport à la fenêtre */
-    left: 0; /* Coller le bouton à gauche de l'écran */
+    position: fixed; /* Fixé par rapport à la fenêtre */
+    left: 20px; /* Décalage légèrement à droite */
     top: 50%; /* Centrer verticalement */
-    transform: translateY(-50%) rotate(90deg); /* Centrer verticalement et faire pivoter de 90 degrés */
-    height: 60px; /* Hauteur du bouton */
-    width: 180px; /* Largeur pour rendre le texte lisible */
-    background-color: #007bff; /* Couleur primaire */
+    transform: translateY(-50%) rotate(90deg); /* Centrer et pivoter */
+    transform-origin: left center; /* La rotation part du bord gauche */
+    height: 60px; /* Hauteur */
+    width: 180px; /* Largeur */
+    background-color: #007bff; /* Couleur */
     color: #fff;
     border: none;
-    border-radius: 50% 50% 0 0; /* Arrondi uniquement en haut à gauche et haut à droite */
+    border-radius: 50% 50% 0 0; /* Bord arrondi */
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 1.2rem;
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, background-color 0.3s ease; /* Transition fluide */
-    text-orientation: upright; /* Orienter le texte pour qu'il soit lisible */
-    margin: 0; /* Annuler toute marge par défaut */
-    padding: 0; /* Annuler toute marge par défaut */
-  }
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    text-orientation: upright; /* Texte lisible */
+    margin: 0;
+    padding: 0;
+}
+
   
   /* Style au survol du bouton */
   .feedback-btn:hover {

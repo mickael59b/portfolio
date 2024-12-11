@@ -76,4 +76,56 @@ section, .section {
     color: #777;
     margin-bottom: 20px;
   }
-     
+/* details */
+.project-details {
+  background-color: #ffffff;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.project-details .card-title {
+  font-size: 2rem;
+}
+
+.project-details .card-text {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.project-details .list-inline-item {
+  font-size: 0.9rem;
+}
+/* pagination */
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.pagination-list {
+  display: flex;
+  list-style: none;
+  padding: 0;
+}
+
+.page-item {
+  margin: 0 5px;
+}
+
+.page-link {
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  background-color: #f8f9fa;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.page-item.active .page-link {
+  background-color: #007bff;
+  color: white;
+}
+
+.page-item.disabled .page-link {
+  background-color: #f1f1f1;
+  cursor: not-allowed;
+}
