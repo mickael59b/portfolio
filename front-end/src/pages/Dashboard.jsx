@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Pour rediriger après déconnexion
+import { useNavigate, NavLink } from 'react-router-dom'; // Import de NavLink
 import statisticsImage from '../assets/images/statistics.svg';  // Importation de l'image
-import { getClientInfo } from '../services/apiClient'; // Assurez-vous d'avoir la fonction qui récupère les données de l'utilisateur connecté
+import { getClientInfo } from '../services/apiClient';
 
 const Dashboard = () => {
   const [userInfo, setUserInfo] = useState(null);
   const navigate = useNavigate();
 
-  // Charger les informations de l'utilisateur lors du rendu du composant
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
         const token = localStorage.getItem('token');
         if (token) {
-          const data = await getClientInfo(token); // Utilisez votre fonction pour récupérer les données utilisateur
+          const data = await getClientInfo(token);
           setUserInfo(data);
         } else {
           navigate('/login'); // Rediriger si pas de token
@@ -26,13 +25,11 @@ const Dashboard = () => {
     fetchUserInfo();
   }, [navigate]);
 
-  // Déconnexion de l'utilisateur
   const logout = () => {
     localStorage.removeItem('token');
     navigate('/login');
   };
 
-  // Si l'utilisateur n'est pas encore chargé, afficher un message de chargement
   if (!userInfo) {
     return <div>Loading...</div>;
   }
@@ -44,18 +41,52 @@ const Dashboard = () => {
         <div className="col-md-3 col-lg-2 p-4 bg-light">
           <h3 className="text-primary">Menu</h3>
           <ul className="list-unstyled">
-            <li><a href="#!" className="btn btn-link text-dark">Tableau de bord</a></li>
+            <li>
+              <NavLink to="/dashboard" className="btn btn-link text-dark" activeClassName="fw-bold">
+                Tableau de bord
+              </NavLink>
+            </li>
             {userInfo.role === 'admin' && (
               <>
-                <li><a href="#!" className="btn btn-link text-dark">Gestion des utilisateurs</a></li>
-                <li><a href="#!" className="btn btn-link text-dark">Paramètres</a></li>
-                <li><a href="#!" className="btn btn-link text-dark">Rapports</a></li>
+                <li>
+                  <NavLink to="/dashboard/utilisateurs" className="btn btn-link text-dark" activeClassName="fw-bold">
+                    Gestion des utilisateurs
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/dashboard/projets" className="btn btn-link text-dark" activeClassName="fw-bold">
+                    Gestion des Projets
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/dashboard/projet/new" className="btn btn-link text-dark" activeClassName="fw-bold">
+                    Créer un Projet
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/dashboard/parametres" className="btn btn-link text-dark" activeClassName="fw-bold">
+                    Paramètres
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/dashboard/rapports" className="btn btn-link text-dark" activeClassName="fw-bold">
+                    Rapports
+                  </NavLink>
+                </li>
               </>
             )}
             {userInfo.role === 'client' && (
               <>
-                <li><a href="#!" className="btn btn-link text-dark">Profil</a></li>
-                <li><a href="#!" className="btn btn-link text-dark">Paramètres</a></li>
+                <li>
+                  <NavLink to="/dashboard/profil" className="btn btn-link text-dark" activeClassName="fw-bold">
+                    Profil
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/dashboard/parametres" className="btn btn-link text-dark" activeClassName="fw-bold">
+                    Paramètres
+                  </NavLink>
+                </li>
               </>
             )}
           </ul>
@@ -75,7 +106,7 @@ const Dashboard = () => {
                     <p className="text-gray-700">
                       Bonjour {userInfo.name}, voici votre tableau de bord. Utilisez les sections de gauche pour naviguer.
                     </p>
-                    <a className="btn btn-primary p-3" href="#!">
+                    <NavLink to="/dashboard/projets" className="btn btn-primary p-3">
                       Commencer
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -92,10 +123,9 @@ const Dashboard = () => {
                         <line x1="5" y1="12" x2="19" y2="12"></line>
                         <polyline points="12 5 19 12 12 19"></polyline>
                       </svg>
-                    </a>
+                    </NavLink>
                   </div>
                   <div className="col d-none d-lg-block mt-xxl-n4">
-                    {/* Image d'illustration */}
                     <img className="img-fluid px-xl-4 mt-xxl-n5" src={statisticsImage} alt="Dashboard Illustration" />
                   </div>
                 </div>
@@ -109,3 +139,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+

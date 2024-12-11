@@ -61,5 +61,28 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// Supprimer un projet par ID
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params;  // Récupère l'ID du projet à supprimer
+  try {
+    // Vérification si l'ID est valide
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: 'ID de projet invalide' });
+    }
+
+    // Supprimer le projet par son ID
+    const deletedProject = await Project.findByIdAndDelete(id);
+
+    if (!deletedProject) {
+      return res.status(404).json({ message: 'Projet non trouvé' });
+    }
+
+    res.status(200).json({ message: 'Projet supprimé avec succès' });
+  } catch (err) {
+    console.error('Erreur serveur :', err);
+    res.status(500).json({ message: 'Erreur du serveur', error: err.message });
+  }
+});
+
 module.exports = router;
 

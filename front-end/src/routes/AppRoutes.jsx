@@ -1,14 +1,17 @@
+// src/AppRoutes.js
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Home from '../pages/Home';
 import About from '../pages/About';
 import Projects from '../pages/Projects';
-import ProjectDetails from '../pages/ProjectDetails'; // Importation de la page de détails
+import ProjectDetails from '../pages/ProjectDetails';
 import Contact from '../pages/Contact';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import Dashboard from '../pages/Dashboard';
-import PrivateRoute from './PrivateRoute';
+import ProjectManagement from '../pages/ProjectManagement';  // Page de gestion des projets
+import PrivateRoute from './PrivateRoute';  // Protection des routes privées
+import AdminRoute from './AdminRoute';  // Protection des routes administrateurs
 
 const AppRoutes = () => {
   return (
@@ -16,17 +19,28 @@ const AppRoutes = () => {
       <Route path="/" element={<Home />} />
       <Route path="/about" element={<About />} />
       <Route path="/projects" element={<Projects />} />
-      {/* Route dynamique pour les détails du projet */}
-      <Route path="/projects/:id" element={<ProjectDetails />} /> {/* Route pour les détails du projet */}
+      <Route path="/projects/:id" element={<ProjectDetails />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+
+      {/* Route protégée pour le tableau de bord, accessible uniquement pour les utilisateurs authentifiés */}
       <Route
         path="/dashboard"
         element={
           <PrivateRoute>
             <Dashboard />
           </PrivateRoute>
+        }
+      />
+
+      {/* Route protégée pour la gestion des projets, accessible uniquement pour les administrateurs */}
+      <Route
+        path="/dashboard/projets"
+        element={
+            <AdminRoute>
+              <ProjectManagement />  {/* Page de gestion des projets */}
+            </AdminRoute>
         }
       />
     </Routes>
