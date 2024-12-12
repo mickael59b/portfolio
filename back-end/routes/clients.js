@@ -101,5 +101,29 @@ router.get('/getClientInfo', authMiddleware, async (req, res) => {
   }
 });
 
+// Route protégée pour mettre à jour les informations du client
+router.put('/updateClient', authMiddleware, async (req, res) => {
+  const { name, email, phone } = req.body;
+
+  try {
+    const client = await Client.findById(req.user.id); // Trouver le client avec l'id de l'utilisateur
+    if (!client) {
+      return res.status(404).json({ message: 'Client non trouvé' });
+    }
+
+    // Si le client existe, on met à jour les informations
+    if (name) client.name = name;
+    if (email) client.email = email;
+    if (phone) client.phone = phone;
+
+    await client.save(); // Sauvegarde les modifications dans la base de données
+
+    res.json({ message: 'Informations mises à jour avec succès', client });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Une erreur est survenue lors de la mise à jour des informations' });
+  }
+});
+
 module.exports = router;
 

@@ -1,20 +1,33 @@
-// src/services/apiClient.js
+import axios from 'axios';
+
+const API_URL = 'http://localhost:5000/api/clients';
+
+// Récupérer les informations du client
 export const getClientInfo = async (token) => {
-    try {
-      const response = await fetch('http://localhost:5000/api/clients/getClientInfo', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-  
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to fetch user information');
-      }
-      return data;
-    } catch (error) {
-      console.error('Error fetching user info:', error);
-      throw error;
-    }
-  };
-  
+  try {
+    const response = await axios.get(`${API_URL}/getClientInfo`, {
+      headers: {
+        Authorization: `Bearer ${token}`, // Envoie le token d'authentification dans l'en-tête
+      },
+    });
+
+    return response.data; // Retourne les données du client
+  } catch (error) {
+    console.error('Error fetching user info:', error);
+    throw new Error(error.response ? error.response.data.message : 'Failed to fetch user information');
+  }
+};
+
+// Mettre à jour les informations du client
+export const updateClient = async (clientData, token) => {
+  try {
+    const response = await axios.put(`${API_URL}/updateClient`, clientData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data; // Retourne les informations du client mises à jour
+  } catch (error) {
+    throw new Error(error.response ? error.response.data.message : 'Erreur inconnue');
+  }
+};

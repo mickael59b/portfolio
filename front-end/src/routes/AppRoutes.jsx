@@ -9,6 +9,7 @@ import Contact from '../pages/Contact';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import Dashboard from '../pages/Dashboard';
+import Settings from '../pages/Settings'; // Nouvelle page Settings
 import ProjectManagement from '../pages/ProjectManagement';  // Page de gestion des projets
 import ProjectCreate from '../pages/CreateProject'; // Page de création de projets
 import PrivateRoute from './PrivateRoute';  // Protection des routes privées
@@ -31,6 +32,16 @@ const AppRoutes = () => {
         element={
           <PrivateRoute>
             <Dashboard />
+          </PrivateRoute>
+        }
+      />
+
+      {/* Route protégée pour les paramètres client */}
+      <Route
+        path="/dashboard/settings"
+        element={
+          <PrivateRoute>
+            <Settings />
           </PrivateRoute>
         }
       />

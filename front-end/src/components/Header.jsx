@@ -1,35 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { getClientInfo } from '../services/apiClient'; // Importez la fonction
-import '../assets/css/header.css';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Header = () => {
-  const [user, setUser] = useState(null);
-  const navigate = useNavigate();
-
-  const isAuthenticated = !!localStorage.getItem('token');
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const token = localStorage.getItem('token');
-      if (!token) return;
-
-      try {
-        const userData = await getClientInfo(token);
-        setUser(userData);
-      } catch (error) {
-        console.error('Error:', error.message);
-      }
-    };
-
-    if (isAuthenticated) {
-      fetchUserData();
-    }
-  }, [isAuthenticated]);
+  const { isAuthenticated, user, logout } = useAuth(); // Récupérez les données utilisateur et les actions
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/login');
+    logout(); // Déconnecte l'utilisateur
   };
 
   return (
@@ -98,26 +75,13 @@ const Header = () => {
                   height="32"
                   className="avatar rounded-2"
                 />{' '}
-                <user className="name">{user.name}</user>
+                <span className="name">{user.name}</span>
               </a>
               <ul className="dropdown-menu text-small" aria-labelledby="dropdownUser1">
                 <li>
-                  <a className='dropdown-item' href='/dashboard'>Compte</a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#">
-                    New project...
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Settings
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Profile
-                  </a>
+                  <Link className="dropdown-item" to="/dashboard">
+                    Compte
+                  </Link>
                 </li>
                 <li>
                   <hr className="dropdown-divider" />
@@ -131,8 +95,8 @@ const Header = () => {
             </div>
           ) : (
             <Link className="btn fw-500 ms-lg-4 btn-primary d-flex align-items-center justify-content-center" to="/login">
-            Connexion <i className="fa fa-sign-in ms-2" aria-hidden="true"></i>
-          </Link>          
+              Connexion <i className="fa fa-sign-in ms-2" aria-hidden="true"></i>
+            </Link>
           )}
         </div>
       </div>

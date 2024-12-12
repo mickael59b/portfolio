@@ -1,43 +1,60 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getClientInfo } from '../services/apiClient'; // Importez la fonction
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userRole, setUserRole] = useState(null); // Stocker le rôle de l'utilisateur
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
-  // Vérification de l'authentification au démarrage
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const role = localStorage.getItem('role'); // Récupérer le rôle
-    if (token && role) {
-      setIsAuthenticated(true);
-      setUserRole(role);
-    }
+    const fetchUserData = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+
+      try {
+        const userInfo = await getClientInfo(token);
+        setUser(userInfo);
+        setIsAuthenticated(true);
+      } catch (error) {
+        console.error('Error fetching user info:', error.message);
+        setIsAuthenticated(false);
+      }
+    };
+
+    fetchUserData();
   }, []);
 
-  const login = (token, role) => {
+  const login = async (token) => {
     localStorage.setItem('token', token);
-    localStorage.setItem('role', role); // Stocker le rôle
-    setIsAuthenticated(true);
-    setUserRole(role);
-    navigate('/dashboard'); // Redirection vers le tableau de bord
+    try {
+      const userInfo = await getClientInfo(token);
+      setUser(userInfo);
+      setIsAuthenticated(true);
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Login error:', error.message);
+      setIsAuthenticated(false);
+    }
   };
 
   const logout = () => {
     localStorage.removeItem('token');
-    localStorage.removeItem('role');
+    setUser(null);
     setIsAuthenticated(false);
-    setUserRole(null);
-    navigate('/login'); // Redirection vers la page de connexion
+    navigate('/login');
+  };
+
+  const updateUser = (updatedUser) => {
+    setUser(updatedUser); // Met à jour les données utilisateur dans le contexte
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, userRole, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, login, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );

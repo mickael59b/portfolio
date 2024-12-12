@@ -1,3 +1,4 @@
+// src/components/Message.jsx
 import React, { useEffect, useState } from 'react';
 
 const Message = ({ type, message }) => {
@@ -25,5 +26,3 @@ const Message = ({ type, message }) => {
 };
 
 export default Message;
-
-
