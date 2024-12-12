@@ -1,3 +1,4 @@
+// src/services/apiProjet
 import axios from "axios";
 
 // Définition de l'URL de base de l'API
@@ -47,27 +48,25 @@ export const obtenirProjetParId = async (id) => {
   }
 };
 
-// Fonction pour créer un nouveau projet
-export const creerProjet = async (projetData) => {
+// Fonction pour créer un nouveau projet avec axios
+export const creerProjet = async (projectData) => {
   try {
-    const response = await axios.post(API_BASE_URL, projetData, {
-      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } // Authentification
-    });
-    return response.data;
+    const response = await axios.post('http://localhost:5000/api/projects', projectData);
+    return { success: true, project: response.data };
   } catch (error) {
+    console.error('Erreur API:', error);
     if (error.response) {
-      console.error("Erreur serveur lors de la création du projet :", error.response.data);
-      throw new Error(`Erreur du serveur : ${error.response.status} - ${error.response.data}`);
+      // Si la réponse existe, renvoyer le message d'erreur
+      return { success: false, error: error.response.data.message || 'Erreur inconnue' };
     } else if (error.request) {
-      console.error("Erreur réseau lors de la création du projet :", error.request);
-      throw new Error("Erreur réseau : Impossible de joindre le serveur.");
+      // Si aucune réponse n'a été reçue du serveur
+      return { success: false, error: 'Aucune réponse du serveur' };
     } else {
-      console.error("Erreur inconnue lors de la création du projet :", error.message);
-      throw new Error(`Erreur inconnue : ${error.message}`);
+      // Si une autre erreur est survenue
+      return { success: false, error: error.message || 'Erreur inconnue' };
     }
   }
 };
-
 // Fonction pour mettre à jour un projet existant
 export const mettreAJourProjet = async (id, projetData) => {
   try {

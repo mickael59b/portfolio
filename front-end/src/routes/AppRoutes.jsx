@@ -10,6 +10,7 @@ import Login from '../pages/Login';
 import Register from '../pages/Register';
 import Dashboard from '../pages/Dashboard';
 import ProjectManagement from '../pages/ProjectManagement';  // Page de gestion des projets
+import ProjectCreate from '../pages/CreateProject'; // Page de création de projets
 import PrivateRoute from './PrivateRoute';  // Protection des routes privées
 import AdminRoute from './AdminRoute';  // Protection des routes administrateurs
 
@@ -42,6 +43,12 @@ const AppRoutes = () => {
               <ProjectManagement />  {/* Page de gestion des projets */}
             </AdminRoute>
         }
+      />
+      <Route path="/dashboard/projet/new" element={
+        <AdminRoute>
+          <ProjectCreate />
+        </AdminRoute>
+      }
       />
     </Routes>
   );

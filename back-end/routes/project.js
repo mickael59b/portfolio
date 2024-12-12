@@ -3,6 +3,24 @@ const mongoose = require('mongoose');
 const Project = require('../models/Project');
 const router = express.Router();
 
+// Route pour créer un projet
+router.post('/', async (req, res) => {
+  try {
+    // Vérification du corps de la requête
+    if (!req.body.title || !req.body.category || !req.body.description) {
+      return res.status(400).json({ message: 'Tous les champs sont requis' });
+    }
+
+    // Créer un nouveau projet avec le titre
+    const project = new Project(req.body);
+    await project.save();
+    return res.status(201).json(project); // Réponse avec le projet créé
+  } catch (err) {
+    console.error('Erreur lors de la création du projet:', err);
+    return res.status(500).json({ message: 'Erreur lors de la création du projet', error: err.message });
+  }
+});
+
 // Récupérer toutes les catégories uniques des projets
 router.get('/categories', async (req, res) => {
   try {
@@ -38,39 +56,32 @@ router.get('/', async (req, res) => {
 
 // Récupérer un projet par ID
 router.get('/:id', async (req, res) => {
-  const { id } = req.params;  // Récupère l'ID de l'URL
-  console.log('Requête reçue pour l\'ID du projet:', id);  // Affiche l'ID du projet
-
+  const { id } = req.params;
   try {
-    // Vérification si l'ID est valide
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      console.log('ID invalide:', id);  // Affiche si l'ID est invalide
       return res.status(400).json({ message: 'ID de projet invalide' });
     }
 
     const project = await Project.findById(id);
     if (!project) {
-      console.log('Projet non trouvé pour l\'ID:', id);  // Affiche si le projet n'est pas trouvé
       return res.status(404).json({ message: 'Projet non trouvé' });
     }
 
-    res.json(project);  // Retourne les données du projet
+    res.json(project);
   } catch (err) {
-    console.error('Erreur serveur :', err);  // Affiche l'erreur serveur si elle se produit
+    console.error('Erreur serveur:', err);
     res.status(500).json({ message: 'Erreur du serveur', error: err.message });
   }
 });
 
 // Supprimer un projet par ID
 router.delete('/:id', async (req, res) => {
-  const { id } = req.params;  // Récupère l'ID du projet à supprimer
+  const { id } = req.params;
   try {
-    // Vérification si l'ID est valide
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ message: 'ID de projet invalide' });
     }
 
-    // Supprimer le projet par son ID
     const deletedProject = await Project.findByIdAndDelete(id);
 
     if (!deletedProject) {
@@ -79,10 +90,9 @@ router.delete('/:id', async (req, res) => {
 
     res.status(200).json({ message: 'Projet supprimé avec succès' });
   } catch (err) {
-    console.error('Erreur serveur :', err);
+    console.error('Erreur serveur:', err);
     res.status(500).json({ message: 'Erreur du serveur', error: err.message });
   }
 });
 
 module.exports = router;
-
