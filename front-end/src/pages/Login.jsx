@@ -1,28 +1,32 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext'; // Importation de votre contexte Auth
 import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css'; // Importation des styles de Swiper
+import 'swiper/css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const { login } = useAuth(); // Accédez à la fonction de login dans le contexte
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       const response = await axios.post('http://localhost:5000/api/clients/login', { email, password });
-
       const { token, user } = response.data;
 
       if (token) {
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(user));
 
-        navigate('/dashboard');
+        // Appelez la fonction login du contexte pour mettre à jour l'état d'authentification
+        login(token); 
+
+        navigate('/dashboard'); // Redirigez vers le tableau de bord
       }
     } catch (err) {
       setError('Email ou mot de passe incorrect');
@@ -77,12 +81,8 @@ const Login = () => {
                 </div>
               </div>
               <div className="col-md-5 shadow p-4">
-
                 <h6 className="h5 mb-0 mt-3">Welcome back!</h6>
-                <p className="text-muted mt-1 mb-4">
-                  Enter your email address and password to access admin panel.
-                </p>
-
+                <p className="text-muted mt-1 mb-4">Enter your email address and password to access the admin panel.</p>
                 <form onSubmit={handleSubmit} className="authentication-form">
                   <div className="mb-3">
                     <label htmlFor="email" className="form-label">Email <small>*</small></label>
@@ -99,9 +99,7 @@ const Login = () => {
 
                   <div className="mb-3">
                     <label htmlFor="password" className="form-label">Password <small>*</small></label>
-                    <a href="account-forget-password.html" className="float-end text-muted text-unline-dashed ms-1 fs-13">
-                      Forgot your password?
-                    </a>
+                    <a href="account-forget-password.html" className="float-end text-muted text-unline-dashed ms-1 fs-13">Forgot your password?</a>
                     <input
                       type="password"
                       className="form-control"
@@ -155,3 +153,4 @@ const Login = () => {
 };
 
 export default Login;
+

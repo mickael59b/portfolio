@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getClientInfo } from '../services/apiClient'; // Importez la fonction
+import { getClientInfo } from '../services/apiClient';
 
 export const AuthContext = createContext();
 
@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const updateUser = (updatedUser) => {
-    setUser(updatedUser); // Met à jour les données utilisateur dans le contexte
+    setUser(updatedUser); 
   };
 
   return (

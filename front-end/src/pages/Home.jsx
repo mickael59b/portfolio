@@ -1,36 +1,40 @@
 import React, { useEffect } from 'react';
-import Profile_img from '../assets/images/profile.png';  // Assurez-vous que l'image existe à cet emplacement
-import '../assets/css/home.css';
+import Profile_img from '../assets/images/profile.png'; // Image du profil
+import '../assets/css/home.css'; // Vos styles personnalisés
 
 const Home = () => {
   useEffect(() => {
-    document.title = "Accueil - Mon Portfolio";  // Modifie le titre de l'onglet
+    document.title = "Accueil - Intégrateur Web"; // Mise à jour du titre de l'onglet
   }, []);
 
   return (
-    <section className="py-5">
+    <section className="py-5 home-section">
       <div className="container px-5 pb-5">
         <div className="row gx-5 align-items-center">
-          <div className="col-xxl-5">
-            {/* Texte de la section */}
-            <div className="text-center text-xxl-start">
-              <div className="badge bg-gradient-primary-to-secondary text-white mb-4">
-                <div className="text-uppercase">Design &middot; Development &middot; Marketing</div>
-              </div>
-              <div className="fs-3 fw-light text-muted">I can help your business to</div>
-              <h1 className="display-3 fw-bolder mb-5">
-                <span className="text-gradient d-inline">Get online and grow fast</span>
+          {/* Section Texte */}
+          <div className="col-lg-6">
+            <div className="text-center text-lg-start">
+              <h2 className="fs-2 fw-bold text-primary mb-3">
+                Bienvenue sur mon portfolio
+              </h2>
+              <h1 className="display-4 fw-bolder mb-4">
+                <span className="text-gradient d-inline">Intégrateur Web Créatif</span>
               </h1>
-              <div className="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xxl-start mb-3">
-                <a className="btn btn-primary btn-lg px-5 py-3 me-sm-3 fs-6 fw-bolder" href="/resume">Resume</a>
-                <a className="btn btn-outline-dark btn-lg px-5 py-3 fs-6 fw-bolder" href="/projects">Projects</a>
+              <p className="fs-5 text-muted mb-4">
+                Passionné par le développement web, je conçois des interfaces modernes, accessibles et performantes.
+                Explorez mes réalisations et découvrez comment je peux transformer vos idées en expériences numériques.
+              </p>
+              <div className="d-flex gap-3 justify-content-center justify-content-lg-start mb-4">
+                <a className="btn btn-primary btn-lg px-4 py-2" href="/resume">Télécharger CV</a>
+                <a className="btn btn-outline-dark btn-lg px-4 py-2" href="/projects">Voir mes Projets</a>
               </div>
             </div>
           </div>
-          <div className="col-xxl-7">
-            {/* Image de profil et éléments décoratifs */}
-            <div className="d-flex justify-content-center mt-5 mt-xxl-0">
-              <div className="profile bg-gradient-primary-to-secondary p-3">
+
+          {/* Section Image */}
+          <div className="col-lg-6">
+            <div className="text-center">
+              <div className="profile bg-gradient-primary-to-secondary p-4 shadow">
                 <img className="profile-img" src={Profile_img} alt="Profile" />
               </div>
             </div>
@@ -42,3 +46,4 @@ const Home = () => {
 };
 
 export default Home;
+

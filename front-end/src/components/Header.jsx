@@ -1,13 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const Header = () => {
-  const { isAuthenticated, user, logout } = useAuth(); // Récupérez les données utilisateur et les actions
+  const { isAuthenticated, user, logout } = useAuth();
 
   const handleLogout = () => {
     logout(); // Déconnecte l'utilisateur
   };
+
+  useEffect(() => {
+    // Vous pouvez également ajouter un useEffect pour logguer quand l'état change
+    console.log("User:", user);
+    console.log("IsAuthenticated:", isAuthenticated);
+  }, [isAuthenticated, user]); // Ceci garantit que l'effet sera déclenché à chaque mise à jour
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-white py-3 border-bottom">
@@ -75,7 +81,7 @@ const Header = () => {
                   height="32"
                   className="avatar rounded-2"
                 />{' '}
-                <span className="name">{user.name}</span>
+                <span className="name">{user.name || 'Utilisateur'}</span>
               </a>
               <ul className="dropdown-menu text-small" aria-labelledby="dropdownUser1">
                 <li>
