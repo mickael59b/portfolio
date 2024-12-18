@@ -1,0 +1,42 @@
+# Forcer l'utilisation du HTTPS (si vous avez un certificat SSL)
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Permettre le repli vers index.html pour les routes React (SPA)
+RewriteBase /
+
+# Rediriger toutes les requêtes vers index.html, sauf si c'est un fichier ou un répertoire existant
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.html [QSA,L]
+
+# Cache Control - Améliore la performance en contrôlant le cache des fichiers statiques
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType text/css "access plus 1 week"
+  ExpiresByType application/javascript "access plus 1 week"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType image/gif "access plus 1 month"
+  ExpiresByType image/svg+xml "access plus 1 month"
+</IfModule>
+
+# Compression des fichiers pour améliorer les performances
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/javascript application/json
+</IfModule>
+
+# Gérer les erreurs 404
+ErrorDocument 404 /index.html
+
+# Activer le suivi des répertoires
+Options +FollowSymLinks
+
+# Cache pour les fichiers de type image et les assets statiques
+<IfModule mod_headers.c>
+  <FilesMatch "\.(jpg|jpeg|png|gif|svg|woff|woff2|eot|ttf|otf|ico|webp)$">
+    Header set Cache-Control "public, max-age=31536000"
+  </FilesMatch>
+</IfModule>
