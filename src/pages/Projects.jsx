@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { obtenirTousLesProjets } from '../services/apiProjets'; // Assurez-vous que cette fonction existe
-import { Link } from 'react-router-dom'; // Pour les liens vers les détails des projets
+import { Link } from 'react-router-dom';
 
 const ProjectsPage = () => {
   const [projects, setProjects] = useState([]);
@@ -56,7 +56,6 @@ const ProjectsPage = () => {
       <div className="container">
         <h1>Nos Projets</h1>
 
-        {/* Filtre par catégorie avec un style inspiré */}
         <div className="row align-items-center mb-4">
           <div className="col-lg-7 portfolio-info">
             <h3>Explorez nos Projets</h3>
@@ -80,7 +79,6 @@ const ProjectsPage = () => {
           </div>
         </div>
 
-        {/* Liste des projets */}
         <div className="row">
           {filteredProjects.length > 0 ? (
             filteredProjects.map((project) => (
@@ -91,6 +89,11 @@ const ProjectsPage = () => {
                       src={project.imageUrl}
                       alt={project.title}
                       className="card-img-top"
+                      style={{
+                        width: '100%',
+                        height: 'auto',
+                        objectFit: 'cover',
+                      }}
                     />
                   )}
                   <div className="card-body">

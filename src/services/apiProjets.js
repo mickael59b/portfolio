@@ -1,7 +1,8 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://back-end-api-gfl0.onrender.com/api/projects'; // URL de l'API des projets
-const UPLOAD_URL = 'https://back-end-api-gfl0.onrender.com/api/upload'; // URL de l'API d'upload des images
+// API de base
+const API_BASE_URL = 'https://back-end-api-gfl0.onrender.com/api/projects';
+const UPLOAD_URL = 'https://back-end-api-gfl0.onrender.com/api/upload';
 
 // Fonction pour gérer les erreurs
 const handleError = (error) => {
@@ -17,89 +18,12 @@ const handleError = (error) => {
   }
 };
 
-export const creerProjet = async (projectData, imageFile) => {
-  try {
-    let imageInfo = null;
-
-    // Si une image a été téléchargée, on enregistre son URL et son nom
-    if (imageFile) {
-      const uploadResponse = await uploaderImage(imageFile);
-      if (!uploadResponse.success) {
-        return { success: false, error: uploadResponse.error };
-      }
-      imageInfo = {
-        imageUrl: uploadResponse.imageUrl,
-        imageName: uploadResponse.imageName,
-      };
-    }
-
-    // Inclure l'URL et le nom de l'image dans les données du projet
-    const projectWithImage = {
-      ...projectData,
-      imageUrl: imageInfo ? imageInfo.imageUrl : null,
-      imageName: imageInfo ? imageInfo.imageName : null,
-    };
-
-    const response = await axios.post(API_BASE_URL, projectWithImage, {
-      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-    });
-
-    return { success: true, project: response.data };
-  } catch (error) {
-    return handleError(error);
-  }
-};
-
-export const supprimerProjet = async (id) => {
-  try {
-    const response = await axios.delete(`${API_BASE_URL}/${id}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-    });
-    return { success: true, message: 'Projet supprimé avec succès' };
-  } catch (error) {
-    return handleError(error);
-  }
-};
-
-// Récupérer tous les projets
-export const obtenirTousLesProjets = async () => {
-  try {
-    const response = await axios.get(API_BASE_URL, {
-      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-    });
-
-    // Vérifiez si la propriété "projects" est un tableau
-    if (Array.isArray(response.data.projects)) {
-      return { success: true, projects: response.data.projects };
-    } else {
-      console.error('Les projets ne sont pas sous forme de tableau:', response.data);
-      return { success: false, error: 'Les projets ne sont pas sous forme de tableau.' };
-    }
-  } catch (error) {
-    return handleError(error);
-  }
-};
-
-// Récupérer un projet par ID
-export const obtenirProjetParId = async (id) => {
-  try {
-    const response = await axios.get(`${API_BASE_URL}/${id}`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-    });
-    return { success: true, project: response.data };
-  } catch (error) {
-    return handleError(error);
-  }
-};
-
-// Fonction pour uploader une image via l'API
+// Fonction pour uploader une image
 export const uploaderImage = async (file) => {
-  // Vérification de la taille du fichier (par exemple, 5 Mo max)
   if (file.size > 5 * 1024 * 1024) {
     return { success: false, error: 'Le fichier est trop grand. Taille maximale: 5 Mo' };
   }
 
-  // Vérification du type de fichier (ici, une image)
   if (!file.type.startsWith('image/')) {
     return { success: false, error: 'Le fichier doit être une image.' };
   }
@@ -114,8 +38,104 @@ export const uploaderImage = async (file) => {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
     });
-    // Renvoie l'URL et le nom du fichier téléchargé
-    return { success: true, imageUrl: response.data.fileUrl, imageName: response.data.fileName };
+
+    console.log("Réponse de l'API d'upload :", response.data);
+
+    if (response.data && response.data.imageUrl) {
+      return { success: true, imageUrl: response.data.imageUrl, imageName: response.data.imageName };
+    } else {
+      return { success: false, error: 'L\'API n\'a pas renvoyé d\'URL pour l\'image.' };
+    }
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
+// Fonction pour créer un projet
+export const creerProjet = async (projectData, imageFile) => {
+  try {
+    let imageInfo = null;
+
+    // Si une image est sélectionnée, on l'upload d'abord
+    if (imageFile) {
+      const uploadResponse = await uploaderImage(imageFile);
+
+      if (!uploadResponse.success) {
+        console.error("Erreur lors de l'upload de l'image:", uploadResponse.error);
+        return { success: false, error: uploadResponse.error };
+      }
+
+      imageInfo = {
+        imageUrl: uploadResponse.imageUrl,  // L'URL de l'image
+        imageName: uploadResponse.imageName,  // Le nom de l'image
+      };
+    }
+
+    // Ajout des informations de l'image aux données du projet
+    const projectWithImage = {
+      ...projectData,  // Toutes les autres données du projet
+      imageUrl: imageInfo ? imageInfo.imageUrl : null,  // L'URL de l'image
+      imageName: imageInfo ? imageInfo.imageName : null,  // Le nom de l'image
+    };
+
+    console.log("Données envoyées à l'API pour créer le projet:", projectWithImage);
+
+    // Vérification de l'intégrité des données avant l'envoi
+    if (!projectWithImage.title || !projectWithImage.category || !projectWithImage.description) {
+      console.log("Les données sont incomplètes. L'envoi à l'API est bloqué.");
+      return { success: false, error: 'Les données du projet sont incomplètes.' };
+    }
+
+    // Envoi des données à l'API pour créer le projet
+    const response = await axios.post(API_BASE_URL, projectWithImage, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    });
+
+    return { success: true, project: response.data };
+  } catch (error) {
+    console.error("Erreur lors de la création du projet:", error);
+    return handleError(error);
+  }
+};
+
+// Fonction pour récupérer tous les projets
+export const obtenirTousLesProjets = async () => {
+  try {
+    const response = await axios.get(API_BASE_URL, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    });
+
+    if (Array.isArray(response.data)) {
+      return { success: true, projects: response.data };
+    } else {
+      console.error('Les projets ne sont pas sous forme de tableau:', response.data);
+      return { success: false, error: 'Les projets ne sont pas sous forme de tableau.' };
+    }
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
+// Fonction pour obtenir un projet par ID
+export const obtenirProjetParId = async (id) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/${id}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    });
+    return { success: true, project: response.data };
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
+// Fonction pour supprimer un projet
+export const supprimerProjet = async (id) => {
+  try {
+    const response = await axios.delete(`${API_BASE_URL}/${id}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    });
+
+    return { success: true, message: 'Projet supprimé avec succès' };
   } catch (error) {
     return handleError(error);
   }
