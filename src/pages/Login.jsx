@@ -15,21 +15,31 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    console.log('Form submitted'); // Log de soumission du formulaire
+    console.log('Email:', email);
+    console.log('Password:', password);
 
     try {
       const response = await axios.post('https://back-end-api-gfl0.onrender.com/api/clients/login', { email, password });
+      console.log('Response from server:', response); // Log de la réponse du serveur
+
       const { token, user } = response.data;
 
       if (token) {
+        console.log('Token received:', token);
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(user));
 
         // Appelez la fonction login du contexte pour mettre à jour l'état d'authentification
         login(token); 
-
+        console.log('User logged in, navigating to dashboard');
         navigate('/dashboard'); // Redirigez vers le tableau de bord
+      } else {
+        console.log('No token received');
       }
     } catch (err) {
+      console.error('Login error:', err); // Log de l'erreur
       setError('Email ou mot de passe incorrect');
     }
   };
