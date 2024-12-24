@@ -58,7 +58,7 @@ const Contact = () => {
         setIsSubmitting(true);
 
         try {
-            const response = await axios.post('https://back-end-api-gfl0.onrender.com/api/contact', {
+            const response = await axios.post('https://api.acti-informatique.com/contact', {
                 ...formData,
                 recaptchaToken, // Inclure le token reCAPTCHA
             });
@@ -155,15 +155,14 @@ const Contact = () => {
                                     />
                                 </div>
 
-                                {/* reCAPTCHA */}
-                                <ReCAPTCHA
-                                    sitekey="6LdVeAspAAAAAAhQb8mrSQAuuMtsW2HnLVkW_WJZ" // Remplacez par votre clé publique
-                                    onChange={(token) => setRecaptchaToken(token)}
-                                    ref={recaptchaRef}
-                                />
-
-                                <div className="d-flex justify-content-between align-items-center mb-3">
-                                    <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
+                                <div className="d-flex flex-column flex-md-row align-items-center justify-content-between mt-3">
+                                    {/* reCAPTCHA */}
+                                    <ReCAPTCHA
+                                        sitekey="6LdVeAspAAAAAAhQb8mrSQAuuMtsW2HnLVkW_WJZ" // Remplacez par votre clé publique
+                                        onChange={(token) => setRecaptchaToken(token)}
+                                        ref={recaptchaRef}
+                                    />
+                                    <button type="submit" className="btn btn-primary mt-3 mt-md-0 ms-md-3" disabled={isSubmitting}>
                                         {isSubmitting ? 'Envoi en cours...' : 'Envoyer'}
                                     </button>
                                 </div>

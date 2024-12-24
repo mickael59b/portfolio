@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-// API de base
-const API_BASE_URL = 'https://back-end-api-gfl0.onrender.com/api/projects';
-const UPLOAD_URL = 'https://back-end-api-gfl0.onrender.com/api/upload';
+// URL de l'API
+const API_BASE_URL = 'https://api.acti-informatique.com/projects';
+const UPLOAD_URL = 'https://api.acti-informatique.com/upload';
 
 // Fonction pour gérer les erreurs
 const handleError = (error) => {
@@ -67,7 +67,7 @@ export const creerProjet = async (projectData, imageFile) => {
 
       imageInfo = {
         imageUrl: uploadResponse.imageUrl,  // L'URL de l'image
-        imageName: uploadResponse.imageName,  // Le nom de l'image
+        imageName: uploadResponse.imageName || 'default_name',  // Si imageName est undefined, donnez un nom par défaut
       };
     }
 
@@ -78,10 +78,11 @@ export const creerProjet = async (projectData, imageFile) => {
       imageName: imageInfo ? imageInfo.imageName : null,  // Le nom de l'image
     };
 
-    console.log("Données envoyées à l'API pour créer le projet:", projectWithImage);
+    console.log('projectData original:', projectData);
+    console.log('projectWithImage final:', projectWithImage);
 
     // Vérification de l'intégrité des données avant l'envoi
-    if (!projectWithImage.title || !projectWithImage.category || !projectWithImage.description) {
+    if (!projectWithImage.title || !projectWithImage.category || !projectWithImage.description || !projectWithImage.stat) {
       console.log("Les données sont incomplètes. L'envoi à l'API est bloqué.");
       return { success: false, error: 'Les données du projet sont incomplètes.' };
     }
@@ -90,6 +91,8 @@ export const creerProjet = async (projectData, imageFile) => {
     const response = await axios.post(API_BASE_URL, projectWithImage, {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     });
+
+    console.log('Réponse de l\'API après création du projet :', response.data);
 
     return { success: true, project: response.data };
   } catch (error) {
@@ -104,6 +107,8 @@ export const obtenirTousLesProjets = async () => {
     const response = await axios.get(API_BASE_URL, {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     });
+
+    console.log("Réponse de l'API pour récupérer tous les projets :", response.data);
 
     if (Array.isArray(response.data)) {
       return { success: true, projects: response.data };
@@ -122,6 +127,7 @@ export const obtenirProjetParId = async (id) => {
     const response = await axios.get(`${API_BASE_URL}/${id}`, {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     });
+    console.log("Réponse de l'API pour récupérer un projet par ID :", response.data);
     return { success: true, project: response.data };
   } catch (error) {
     return handleError(error);
@@ -135,6 +141,7 @@ export const supprimerProjet = async (id) => {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     });
 
+    console.log(`Réponse de l'API après suppression du projet ${id}:`, response.data);
     return { success: true, message: 'Projet supprimé avec succès' };
   } catch (error) {
     return handleError(error);

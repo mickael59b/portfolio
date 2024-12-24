@@ -1,0 +1,20 @@
+{
+    "education": [
+      {
+        "title": "Formation Développeur Web - OpenClassrooms",
+        "text": "OpenClassrooms propose une formation complète pour devenir intégrateur web, couvrant les bases du développement web, la gestion des projets, et l'utilisation des technologies modernes pour créer des sites web responsives et interactifs.",
+        "year": "2024 - 2025",
+        "institution": "OpenClassrooms, En ligne"
+      }
+    ],
+    "experience": [
+      {
+        "title": "Création du site acti-informatique.com",
+        "text": "- Développement du site web acti-informatique.com en utilisant PHP, avec une attention particulière à la performance, la sécurité et l'ergonomie.",
+        "year": "2020 - 2024",
+        "company": "Acti Informatique",
+        "technologies": ["PHP", "HTML", "CSS", "JavaScript"]
+      }
+    ]
+}
+  

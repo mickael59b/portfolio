@@ -1,3 +1,10 @@
+section, .section {
+  color: var(--default-color);
+  background-color: var(--background-color);
+  padding-bottom: 80px;
+  scroll-margin-top: 90px;
+  overflow: clip;
+}
 a {
   color: var(--bs-link-color);
   text-decoration: none !important;
@@ -43,3 +50,83 @@ a {
   margin-bottom: 5px;
   transition: all 0.3s ease-in-out;
 }
+/* Conteneur principal pour chaque projet */
+.portfolio-item {
+  position: relative; /* Positionnement pour l'affichage des infos */
+  overflow: hidden; /* Cache tout débordement */
+  padding: 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animation fluide */
+}
+
+/* Zoom et ombre sur le conteneur lorsqu'il est survolé */
+.portfolio-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Image du projet */
+.portfolio-item img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Conteneur des informations */
+.portfolio-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7); /* Fond semi-transparent noir */
+  color: #fff;
+  display: flex; /* Active le système de colonnes */
+  justify-content: space-between; /* Sépare les colonnes */
+  align-items: flex-start;
+  padding: 15px;
+  transform: translateY(100%); /* Cache les infos initialement */
+  opacity: 0; /* Initialement transparent */
+  transition: opacity 0.3s ease, transform 0.3s ease; /* Animation fluide */
+}
+
+/* Afficher les informations au hover */
+.portfolio-item:hover .portfolio-info {
+  opacity: 1;
+  transform: translateY(0); /* Les infos remontent */
+}
+
+/* Colonne gauche pour le texte */
+.portfolio-info .info-text {
+  flex: 2; /* Colonne plus large pour le texte */
+  display: flex;
+  flex-direction: column; /* Disposition verticale */
+  gap: 10px; /* Espacement entre les éléments */
+}
+
+.portfolio-info .info-text h4 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.portfolio-info .info-text p {
+  margin: 0;
+  font-size: 14px;
+  color: #ccc;
+  line-height: 1.5;
+}
+
+/* Colonne droite pour les icônes */
+
+.portfolio-info .info-icons a {
+  color: #fff;
+  font-size: 20px; /* Taille des icônes */
+  transition: color 0.3s ease; /* Animation au hover */
+  margin-right: 14px;
+}
+
+.portfolio-info .info-icons a:hover {
+  color: #007bff; /* Couleur des icônes au survol */
+}
+

@@ -1,6 +1,17 @@
 import axios from 'axios';
 
-const API_URL = 'https://back-end-api-gfl0.onrender.com/api/clients';
+const API_URL = 'https://api.acti-informatique.com/clients';
+
+// Connexion du client
+export const loginClient = async (email, password) => {
+  try {
+    const response = await axios.post(`${API_URL}/login`, { email, password });
+    return response.data; // Retourne le token et les informations utilisateur
+  } catch (error) {
+    console.error('Login error:', error);
+    throw new Error(error.response ? error.response.data.message : 'Email ou mot de passe incorrect');
+  }
+};
 
 // Récupérer les informations du client
 export const getClientInfo = async (token) => {

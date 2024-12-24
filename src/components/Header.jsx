@@ -16,18 +16,18 @@ const Header = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-white py-3 border-bottom">
       <div className="container px-5">
-        <span className="navbar-brand">
-          <Link to="/" className="fw-bolder text-primary">
-            Mickael Boutte
-          </Link>
-          {' | '}
-          <span className="text-gradient d-inline">
-            Créateur de{' '}
-            <a href="https://acti-informatique.com" target="_blank" rel="noopener noreferrer">
-              Acti-Informatique
-            </a>
-          </span>
-        </span>
+      <span className="navbar-brand">
+        <Link to="/" className="fw-bolder text-primary">
+    Mickael Boutte
+  </Link>
+  <span className="d-none d-md-inline"> | </span>
+  <span className="text-gradient d-none d-md-inline">
+    Créateur de{' '}
+    <a href="https://acti-informatique.com" target="_blank" rel="noopener noreferrer">
+      Acti-Informatique
+    </a>
+  </span>
+</span>
         <button
           className="navbar-toggler"
           type="button"
@@ -64,7 +64,7 @@ const Header = () => {
           </ul>
 
           {isAuthenticated && user ? (
-            <div className="dropdown text-end">
+            <div className="dropdown">
               <a
                 href="#"
                 className="d-block link-dark text-decoration-none dropdown-toggle"

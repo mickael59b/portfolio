@@ -1,16 +1,25 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import ProfileImg from '../assets/images/profile.png'; // Chemin vers votre photo de profil
 import icon_html5 from '../assets/images/html-5.svg'; 
 import icon_css from '../assets/images/css-3.svg';
-import icon_js from'../assets/images/javascript.svg';
+import icon_js from '../assets/images/javascript.svg';
 import icon_react from '../assets/images/react.svg';
 import icon_bootstrap from '../assets/images/bootstrap.svg';
 import icon_git from '../assets/images/git.svg';
+import Education from '../components/Education';  // Capitalized to match React conventions
+import Experience from '../components/Experience';  // Capitalized to match React conventions
+import data from '../data/data.json';
 
 const About = () => {
+
+  const [educationItems, setEducationItems] = useState([]);
+  const [experienceItems, setExperienceItems] = useState([]);
+
   useEffect(() => {
     document.title = "À propos - Intégrateur Web";
+    setEducationItems(data.education);
+    setExperienceItems(data.experience);
   }, []);
 
   return (
@@ -34,7 +43,7 @@ const About = () => {
                 Mon engagement envers la qualité et la satisfaction client fait de moi un partenaire de confiance pour vos projets web.
               </p>
             </div>
-            <div className="col-md-6 text-center">
+            <div className="col-md-6 text-center d-none d-md-block">
               <img
                 src={ProfileImg}
                 alt="Photo de profil"
@@ -88,7 +97,7 @@ const About = () => {
             </div>
           </div>
 
-          {/* Section parcours */}
+          {/* Section Parcours */}
           <div className="row">
             <div className="col-md-12">
               <h2 className="fw-bold mb-3">Mon Parcours</h2>
@@ -101,6 +110,11 @@ const About = () => {
               </p>
             </div>
           </div>
+
+          {/* Section Education et Experience */}
+          <Education items={educationItems} />
+          <hr className="hr-dashed" />
+          <Experience items={experienceItems} />
         </motion.div>
       </div>
     </section>

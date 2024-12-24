@@ -64,7 +64,7 @@ const Dashboard = () => {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="/dashboard/parametres" className="btn btn-link text-dark" activeClassName="fw-bold">
+                  <NavLink to="/dashboard/settings" className="btn btn-link text-dark" activeClassName="fw-bold">
                     Paramètres
                   </NavLink>
                 </li>

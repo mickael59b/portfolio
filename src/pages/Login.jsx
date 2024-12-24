@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext'; // Importation de votre contexte Auth
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
+import { loginClient } from '../services/apiClient'; // Importation de la fonction de connexion
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -15,14 +14,9 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    console.log('Email:', email);  // Log les valeurs des champs
-    console.log('Password:', password);
-  
+
     try {
-      const response = await axios.post('https://back-end-api-gfl0.onrender.com/api/clients/login', { email, password });
-      const { token, user } = response.data;
-  
+      const { token, user } = await loginClient(email, password);
       if (token) {
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(user));
@@ -30,8 +24,8 @@ const Login = () => {
         navigate('/dashboard');
       }
     } catch (err) {
-      console.error('Login error:', err);  // Log l'erreur complète
-      setError('Email ou mot de passe incorrect');
+      console.error('Login error:', err); 
+      setError(err.message || 'Erreur inconnue');
     }
   };
 
