@@ -9,6 +9,10 @@ a {
   color: var(--bs-link-color);
   text-decoration: none !important;
 }
+.avatar-md {
+  height: 2.25rem;
+  width: 2.25rem;
+}
 .alert{
   position: absolute;
   top:74px;
@@ -25,7 +29,41 @@ a {
   -webkit-background-clip: text;
   color: transparent;
 }
-
+.countbar-one {
+  border: 1px solid #e2dfeb;
+  padding: 15px;
+  border-radius: 0.375rem;
+}
+.countbar-one__single {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: 0.5s;
+  padding: 6px 12px 12px
+}
+.countbar-one__single:hover {
+  background-color: #58aec0;
+}
+.countbar-one__icon {
+  padding-right: 20px;
+  transition: 0.5s;
+}
+.countbar-one__icon img {
+  height: 64px;
+  width: 64px;
+}
+.countbar-one__number h4 {
+  padding-right: 20px;
+  font-size: 40px;
+  font-weight: 600;
+  text-align: start;
+}
+.countbar-one__number span {
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
 .about-section img {
   border: 4px solid #f8f9fa;
 }

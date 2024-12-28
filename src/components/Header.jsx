@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
@@ -43,17 +43,17 @@ const Header = () => {
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0 small fw-bolder">
             <li className="nav-item">
               <Link className="nav-link" to="/">
-                Home
+              Accueil
               </Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link" to="/about">
-                About
+              À propos
               </Link>
             </li>
             <li className="nav-item">
               <Link className="nav-link" to="/projects">
-                Projects
+                Projets
               </Link>
             </li>
             <li className="nav-item">

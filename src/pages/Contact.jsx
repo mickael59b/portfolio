@@ -100,7 +100,7 @@ const Contact = () => {
                                     Contactez-moi pour discuter de votre projet et découvrir comment je peux
                                     vous aider à faire briller votre marque.
                                 </p>
-                                <img className="carte_img" src={Carte_map} alt="Carte_map" />
+                                <img className="carte_img d-none d-sm-block " src={Carte_map} alt="Carte_map" />
                             </div>
                         </div>
 

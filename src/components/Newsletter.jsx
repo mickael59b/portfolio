@@ -1,40 +1,55 @@
 // src/components/Newsletter.jsx
 import React, { useState } from 'react';
 import img_news from '../assets/images/wall-post-pana.svg';
-import validator from 'validator'; // Pour valider l'email
+import validator from 'validator';
 
 const Newsletter = () => {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validation de l'email
     if (!validator.isEmail(email)) {
       setError('Veuillez entrer une adresse email valide.');
+      setSuccessMessage('');
       return;
     }
 
     setIsSubmitting(true);
     setError('');
+    setSuccessMessage('');
 
-    // Logique pour envoyer l'email au serveur ou ajouter à la liste de diffusion
-    // Exemples d'envoi d'email via une API ou autre service :
-    // axios.post('/api/subscribe', { email })
+    try {
+      const response = await fetch('https://api.acti-informatique.com/contact/newsletter', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
 
-    // Après la soumission
-    setTimeout(() => {
-      setIsSubmitting(false);
-      alert('Merci pour votre inscription à la newsletter!');
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Une erreur est survenue');
+      }
+
+      setSuccessMessage('Merci pour votre inscription à la newsletter ! 😊');
       setEmail('');
-    }, 2000); // Simuler un délai d'envoi
-
+    } catch (error) {
+      setError(error.message || 'Une erreur est survenue lors de l\'inscription');
+      setSuccessMessage('');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -61,7 +76,11 @@ const Newsletter = () => {
             </button>
           </div>
         </form>
-        {error && <p className="text-danger">{error}</p>}
+
+        {/* Messages d'erreur ou de succès */}
+        {error && <p className="text-danger mt-3">{error}</p>}
+        {successMessage && <p className="text-success mt-3">{successMessage}</p>}
+
         <p className="text-muted small fst-italic mt-3">
           Ce site est protégé par reCAPTCHA et la politique de{' '}
           <a href="https://policies.google.com/privacy" target="_blank" rel="noreferrer">

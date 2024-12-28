@@ -41,7 +41,7 @@ const Register = () => {
     try {
       // Log before the API call
       console.log('Sending request to register the user...');
-      const response = await axios.post('https://back-end-api-gfl0.onrender.com/api/clients/register', { name, email, password });
+      const response = await axios.post('https://api.acti-informatique.com/clients/register', { name, email, password });
       
       // Log response data after successful registration
       console.log('Registration successful:', response.data);

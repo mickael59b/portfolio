@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { creerProjet } from '../services/apiProjets';
 
 const CreateProject = () => {
@@ -43,8 +43,6 @@ const CreateProject = () => {
       link,
     };
 
-    console.log("Données envoyées à l'API :", projectData);
-
     try {
       const response = await creerProjet(projectData, imageFile);
 
@@ -80,22 +78,23 @@ const CreateProject = () => {
           <div className="col-lg-5">
             <div className="card shadow-sm border-0">
               <div className="card-header text-center bg-primary text-white">
-                <h5>image du Projet</h5>
+                <h5>Image du Projet</h5>
               </div>
               <div className="card-body text-center">
                 <label htmlFor="imageUpload" className="upload-label">
-                  {/* Image par défaut ou prévisualisation */}
                   <img
                     src={
                       imageFile
                         ? URL.createObjectURL(imageFile)
-                        : 'https://via.placeholder.com/200x150.png?text=image+par+d%C3%A9faut'
+                        : 'https://via.placeholder.com/500x500.png?text=image+par+d%C3%A9faut'
                     }
                     alt="Aperçu"
                     className="img-fluid rounded shadow-sm"
                     style={{
-                      maxWidth: '100%',
-                      height: 'auto',
+                      Width: '500px',
+                      height: '375px',
+                      objectFit: 'cover',
+                      objectPosition: 'top',
                       cursor: 'pointer',
                     }}
                   />
@@ -107,31 +106,18 @@ const CreateProject = () => {
                   onChange={handleImageChange}
                   accept="image/*"
                 />
-                <p className="text-muted mt-3">Cliquez sur l'image pour changer l'image du projet</p>
-
-                {/* Prévisualisation du formulaire */}
-                <div className="preview mt-4">
-                  <h5 className="text-primary">Aperçu du Projet</h5>
-                  <div className="card border">
-                    <div className="card-body">
-                      <h6 className="card-title">
-                        <strong>Titre :</strong> {title || 'Aucun titre'}
-                      </h6>
-                      <p className="card-text">
-                        <strong>Catégorie :</strong> {category || 'Aucune catégorie'}
-                      </p>
-                      <p className="card-text">
-                        <strong>Description courte :</strong> {shortDescription || 'Aucune description'}
-                      </p>
-                      <p className="card-text">
-                        <strong>Compétences :</strong> {skills || 'Aucune compétence'}
-                      </p>
-                      <p className="card-text">
-                        <strong>Statut :</strong> {stat || 'Aucun statut'}
-                      </p>
-                      <p>
-                        <strong>Link Github :</strong> {`https://github.com/mickael59b/${link || '*****'}`}
-                      </p>
+                {/* Prévisualisation du projet */}
+                <div className="row mt-5">
+                  <div className="col-lg-12">
+                    <div className="card">
+                      <div className="card-body">
+                        <h5><strong>Titre :</strong> {title || 'Aucun titre'}</h5>
+                        <p><strong>Catégorie :</strong> {category || 'Aucune catégorie'}</p>
+                        <p><strong>Description courte :</strong> {shortDescription || 'Aucune description courte'}</p>
+                        <p><strong>Compétences :</strong> {skills || 'Aucune compétence'}</p>
+                        <p><strong>Statut :</strong> {stat || 'Aucun statut'}</p>
+                        <p><strong>GitHub :</strong> {`https://github.com/mickael59b/${link || '*****'}`}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -174,18 +160,6 @@ const CreateProject = () => {
                   </div>
 
                   <div className="form-group mb-3">
-                    <label htmlFor="description" className="form-label">Description</label>
-                    <textarea
-                      id="description"
-                      className="form-control"
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                      placeholder="Description détaillée du projet"
-                      required
-                    />
-                  </div>
-
-                  <div className="form-group mb-3">
                     <label htmlFor="shortDescription" className="form-label">Description Courte</label>
                     <textarea
                       id="shortDescription"
@@ -193,6 +167,19 @@ const CreateProject = () => {
                       value={shortDescription}
                       onChange={(e) => setShortDescription(e.target.value)}
                       placeholder="Un résumé du projet en quelques mots"
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group mb-3">
+                    <label htmlFor="description" className="form-label">Description</label>
+                    <textarea
+                      id="description"
+                      className="form-control"
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      placeholder="Description détaillée du projet"
+                      style={{ height: '300px' }} // Modifier la hauteur ici
                       required
                     />
                   </div>

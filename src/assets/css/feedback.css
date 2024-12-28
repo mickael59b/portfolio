@@ -1,39 +1,29 @@
 /* Réinitialisation des marges et paddings pour éviter les espaces par défaut */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box; /* Assurer que les bordures et paddings sont inclus dans les dimensions */
-  }
-  
-  /* Body et HTML sans marges */
-  body, html {
-    margin: 0;
-    padding: 0;
-  }
+
   
   /* Styles pour le bouton "Feedback" */
   .feedback-btn {
-    position: fixed; /* Fixé par rapport à la fenêtre */
-    left: 20px; /* Décalage légèrement à droite */
-    top: 50%; /* Centrer verticalement */
-    transform: translateY(-50%) rotate(90deg); /* Centrer et pivoter */
-    transform-origin: left center; /* La rotation part du bord gauche */
-    height: 60px; /* Hauteur */
-    width: 180px; /* Largeur */
-    background-color: #007bff; /* Couleur */
+    position: fixed;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%) rotate(90deg);
+    transform-origin: left center;
+    height: 60px;
+    width: 180px;
+    background-color: #007bff;
     color: #fff;
     border: none;
-    border-radius: 50% 50% 0 0; /* Bord arrondi */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    border-radius: 50% 50% 0 0;
+    display: block;
+    text-align: center; /* Centre le texte horizontalement */
+    line-height: 60px; /* Centre verticalement en alignant sur la hauteur */
     font-size: 1.2rem;
     cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px #0000001a;
     transition: transform 0.3s ease, background-color 0.3s ease;
-    text-orientation: upright; /* Texte lisible */
     margin: 0;
     padding: 0;
+    white-space: nowrap; /* Empêche le texte de se couper */
 }
 
   

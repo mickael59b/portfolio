@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet'; // Importation de Helmet
 import { useAuth } from '../context/AuthContext'; // Importation de votre contexte Auth
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -16,10 +17,9 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const { token, user } = await loginClient(email, password);
+      const {token} = await loginClient(email, password);
       if (token) {
         localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(user));
         login(token);
         navigate('/dashboard');
       }
@@ -31,6 +31,10 @@ const Login = () => {
 
   return (
     <section id="login">
+      <Helmet>
+        <title>Login - Intégrateur Web</title>
+        <meta name="description" content="Page de connexion pour accéder au panneau d'administration de l'application." />
+      </Helmet>
       <div className="container">
         <div className="row justify-content-center mt-5">
           <div className="col-xl-12">
@@ -124,21 +128,6 @@ const Login = () => {
                     <button className="btn btn-primary" type="submit">Log In</button>
                   </div>
                 </form>
-
-                <div className="py-3 text-center">
-                  <span className="fs-13 fw-bold">OR</span>
-                </div>
-
-                <div className="row">
-                  <div className="col-12 text-center">
-                    <a href="#" className="btn btn-white w-100">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="feather feather-github icon icon-xs me-2">
-                        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
-                      </svg>
-                      Github
-                    </a>
-                  </div>
-                </div>
               </div>
             </div>
           </div>

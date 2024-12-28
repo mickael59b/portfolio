@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import { useTypewriter, Cursor } from 'react-simple-typewriter'; // Importation du composant Typewriter
-import Profile_img from '../assets/images/profile.png'; // Image du profil
-import icon_html5 from '../assets/images/html-5.svg'; 
-import icon_css from '../assets/images/css-3.svg';
-import icon_js from'../assets/images/javascript.svg';
-import icon_react from '../assets/images/react.svg';
+import Profile_img from '../assets/images/profile.webp'; // Image du profil
+import icon_html5 from '../assets/images/html-5.webp'; 
+import icon_css from '../assets/images/css-3.webp';
+import icon_js from'../assets/images/javascript.webp';
+import icon_react from '../assets/images/react.webp';
 import '../assets/css/home.css'; // Vos styles personnalisés
 
 const Home = () => {
   useEffect(() => {
-    document.title = "Accueil - Intégrateur Web"; // Mise à jour du titre de l'onglet
   }, []);
   const [text] = useTypewriter({
     words: ['PHP', 'REACT', 'HTML', 'CSS'],
@@ -19,6 +19,16 @@ const Home = () => {
 
   return (
     <div>
+      <Helmet>
+        {/* Titre de la page */}
+          <title>Portfolio Intégrateur Web | Développement Moderne & Créatif</title>
+
+        {/* Description de la page */}
+        <meta
+          name="description"
+          content="Découvrez mon portfolio en tant qu'intégrateur web. Je conçois des interfaces modernes, performantes et accessibles pour vos projets numériques."
+        />
+      </Helmet>
       {/* Section d'Accueil */}
       <section className="py-5 home-section">
         <div className="container px-5 pb-5">
@@ -67,20 +77,6 @@ const Home = () => {
                 Développeur passionné par la création de sites et applications web modernes, performants et responsives.
                 Vous pouvez découvrir ici mon parcours et mes compétences.
               </h4>
-              <div className="social">
-                <a href="#">
-                  <i className="fa-brands fa-github me-1"></i>
-                </a>
-                <a href="#">
-                  <i className="fa-brands fa-twitter me-1"></i>
-                </a>
-                <a href="#">
-                  <i className="fa-brands fa-google me-1"></i>
-                </a>
-                <a href="#">
-                  <i className="fa-brands fa-linkedin me-1"></i>
-                </a>
-              </div>
             </div>
 
             {/* Liste des Informations Personnelles */}

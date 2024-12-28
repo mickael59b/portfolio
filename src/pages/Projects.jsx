@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { obtenirTousLesProjets } from '../services/apiProjets'; // Assurez-vous que cette fonction existe
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'; // Importation du composant Link
 import '../assets/css/projets.css';
 
 const ProjectsPage = () => {
@@ -9,7 +10,6 @@ const ProjectsPage = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('All');
-
   const [currentPage, setCurrentPage] = useState(1);
   const projectsPerPage = 6;
 
@@ -19,6 +19,40 @@ const ProjectsPage = () => {
     setFilteredProjects(
       category === 'All' ? projects : projects.filter((p) => p.category === category)
     );
+  };
+
+  const calculateTimeElapsed = (createdAt) => {
+    const creationDate = new Date(createdAt);
+    const currentDate = new Date();
+    const differenceInTime = currentDate.getTime() - creationDate.getTime();
+  
+    const years = Math.floor(differenceInTime / (1000 * 60 * 60 * 24 * 365));
+    const months = Math.floor((differenceInTime % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24 * 30));
+    const days = Math.floor((differenceInTime % (1000 * 60 * 60 * 24 * 30)) / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((differenceInTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((differenceInTime % (1000 * 60 * 60)) / (1000 * 60));
+  
+    let timeText = '';
+    let detailText = '';
+  
+    if (years > 0) {
+      timeText = `${years}`;
+      detailText = `${years > 1 ? 'ans' : 'an'}, ${months} mois`;
+    } else if (months > 0) {
+      timeText = `${months}`;
+      detailText = `${months > 1 ? 'mois' : 'mois'}, ${days} ${days > 1 ? 'jours' : 'jour'}`;
+    } else if (days > 0) {
+      timeText = `${days}`;
+      detailText = `${days > 1 ? 'jours' : 'jour'}, ${hours} ${hours > 1 ? 'heures' : 'heure'}`;
+    } else if (hours > 0) {
+      timeText = `${hours}`;
+      detailText = `${hours > 1 ? 'heures' : 'heure'}, ${minutes} ${minutes > 1 ? 'minutes' : 'minute'}`;
+    } else {
+      timeText = `${minutes}`;
+      detailText = `${minutes > 1 ? 'minutes' : 'minute'}`;
+    }
+  
+    return { timeText, detailText };
   };
 
   useEffect(() => {
@@ -62,6 +96,12 @@ const ProjectsPage = () => {
   return (
     <section className="py-5 bg-light">
       <div className="container">
+        {/* Helmet pour le titre et les meta informations */}
+        <Helmet>
+          <title>Projets - Intégrateur Web</title>
+          <meta name="description" content="Explorez une sélection de projets réalisés par notre équipe." />
+        </Helmet>
+
         {/* Filtres */}
         <div className="row mb-4">
           <div className="col-md-8">
@@ -73,9 +113,7 @@ const ProjectsPage = () => {
               {categories.map((category, index) => (
                 <button
                   key={index}
-                  className={`btn ${
-                    selectedCategory === category ? 'btn-primary' : 'btn-outline-secondary'
-                  }`}
+                  className={`btn ${selectedCategory === category ? 'btn-primary' : 'btn-outline-secondary'}`}
                   onClick={() => filterProjectsByCategory(category)}
                 >
                   {category}
@@ -87,97 +125,51 @@ const ProjectsPage = () => {
 
         {/* Grille des projets */}
         <div className="row g-4">
-  {currentProjects.length > 0 ? (
-    currentProjects.map((project) => (
-      <div className="col-md-6 col-lg-4 col-sm-12" key={project._id}>
-        <div className="projet-one__single wow fadeInUp animated">
-          <div className="projet-one__img__wrapper">
-            <div className="projet-one__img">
-              {project.imageUrl && (
-                <img
-                  src={project.imageUrl}
-                  alt={project.title}
-                  className="card-img-top"
-                />
-              )}
-              <a href={`/projects/${project._id}`} className="projet-one__single__img__link"></a>
-            </div>
-            <div className="projet-one__categories">
-              <span className="posted_in">
-                <a href="" rel="tag">{project.category}</a>
-              </span>
-            </div>
-            <div className="projet-one__love">
-              <i className="fa-regular fa-heart"></i>
-            </div>
-          </div>
-          <div className="projet-one__content">
-            <div className="projet-one__time-remaining">
-              <div className="time-remaining">
-                <i className="fa-solid fa-clock"></i>
-                <span className="time-remaining-desc">{project.daysRemaining}</span>
-                <span className="time-remaining-name">days Remaining</span>
-              </div>
-            </div>
-            <h4 className="projet-one__title">
-              <a href={`/projects/${project._id}`}>{project.title}</a>
-            </h4>
-            <div className="projet-one__infu">
-              <div className="projet-one__infu-wrap">
-                <div className="projet-one__achive">
-                  <div className="projet-one__achive-icon">
-                    <a href="">
-                      <span className="icon-mission"></span>
-                    </a>
+          {currentProjects.length > 0 ? (
+            currentProjects.map((project) => (
+              <div className="col-md-6 col-lg-4 col-sm-12" key={project._id}>
+                <div className="projet-one__single wow fadeInUp animated">
+                  <div className="projet-one__img__wrapper">
+                    <div className="projet-one__img">
+                      {project.imageUrl && (
+                        <img
+                          src={project.imageUrl}
+                          alt={project.title}
+                          className="card-img-top"
+                        />
+                      )}
+                      <Link to={`/project/${project._id}`} className="projet-one__single__img__link"></Link>
+                    </div>
+                    <div className="projet-one__categories">
+                      <span className="posted_in">
+                        <Link to="#" rel="tag">{project.category}</Link>
+                      </span>
+                    </div>
+                    <div className="projet-one__love">
+                      <i className="fa-regular fa-heart"></i>
+                    </div>
                   </div>
-                  <div className="projet-one__achive-content">
-                    <span className="projet-one__achive-level">Achive:</span>
-                    <span className="projet-one__achive-vlaue">{project.raisedAmount}</span>
-                  </div>
-                </div>
-                <div className="projet-one__goal">
-                  <div className="projet-one__achive-icon">
-                    <a href="">
-                      <span className="icon-terget"></span>
-                    </a>
-                  </div>
-                  <div className="projet-one__achive-content">
-                    <span className="projet-one__achive-level">Goal:</span>
-                    <span className="projet-one__achive-vlaue">{project.goalAmount}</span>
+                  <div className="projet-one__content">
+                    <div className="projet-one__time-remaining">
+                      <div className="time-remaining">
+                        <i className="fa-solid fa-clock"></i>
+                        <span className="time-remaining-desc">{calculateTimeElapsed(project.createdAt).timeText}</span>
+                        <span className="time-remaining-name">{calculateTimeElapsed(project.createdAt).detailText}</span>
+                      </div>
+                    </div>
+                    <h4 className="projet-one__title">
+                      <Link to={`/projects/${project._id}`}>{project.title}</Link>
+                    </h4>
                   </div>
                 </div>
               </div>
+            ))
+          ) : (
+            <div className="col-12 text-center">
+              <p className="text-muted">Aucun projet trouvé dans cette catégorie.</p>
             </div>
-          </div>
-          <div className="projet-one__bottom">
-            <div className="progress-box">
-              <div className="progress-box__bar-text">Raised</div>
-              <div className="progress-box__bar">
-                <div
-                  className="progress-box__bar__inner count-bar counted"
-                  data-percent={`${(project.raisedAmount / project.goalAmount) * 100}%`}
-                  style={{
-                    width: `${(project.raisedAmount / project.goalAmount) * 100}%`,
-                  }}
-                ></div>
-              </div>
-              <div className="progress-box__bar-number count-box counted">
-                <span className="count-text" data-stop="70" data-speed="1000">
-                  {Math.round((project.raisedAmount / project.goalAmount) * 100)}
-                </span>
-                <span>%</span>
-              </div>
-            </div>
-          </div>
+          )}
         </div>
-      </div>
-    ))
-  ) : (
-    <div className="col-12 text-center">
-      <p className="text-muted">Aucun projet trouvé dans cette catégorie.</p>
-    </div>
-  )}
-</div>
 
         {/* Pagination */}
         <nav aria-label="Pagination" className="mt-4">

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getClientInfo } from '../services/apiClient';
 
@@ -43,11 +43,11 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
-    setUser(null);
-    setIsAuthenticated(false);
-    navigate('/login');
-  };
+    localStorage.removeItem('token'); // Supprime le token
+    setUser(null); // Réinitialise l'utilisateur dans le contexte
+    setIsAuthenticated(false); // Réinitialise l'état d'authentification
+    navigate('/login'); // Redirige vers la page de connexion
+};
 
   const updateUser = (updatedUser) => {
     setUser(updatedUser); 

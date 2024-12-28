@@ -1,25 +1,51 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import ProfileImg from '../assets/images/profile.png'; // Chemin vers votre photo de profil
 import icon_html5 from '../assets/images/html-5.svg'; 
 import icon_css from '../assets/images/css-3.svg';
 import icon_js from '../assets/images/javascript.svg';
 import icon_react from '../assets/images/react.svg';
 import icon_bootstrap from '../assets/images/bootstrap.svg';
 import icon_git from '../assets/images/git.svg';
+import icon_projets from '../assets/images/coordinateur.png';
+import icon_cls_st from '../assets/images/client-satisfait.png';
+import icon_augm from '../assets/images/augmenter.png';
 import Education from '../components/Education';  // Capitalized to match React conventions
 import Experience from '../components/Experience';  // Capitalized to match React conventions
+import { obtenirTousLesProjets } from '../services/apiProjets';
 import data from '../data/data.json';
 
 const About = () => {
 
   const [educationItems, setEducationItems] = useState([]);
   const [experienceItems, setExperienceItems] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const [completedProjectsCount, setCompletedProjectsCount] = useState(0);
 
   useEffect(() => {
+
     document.title = "À propos - Intégrateur Web";
     setEducationItems(data.education);
     setExperienceItems(data.experience);
+
+     // Chargement des projets depuis l'API
+    const fetchProjects = async () => {
+      try {
+        const response = await obtenirTousLesProjets();
+        if (response && response.projects) {
+          setProjects(response.projects);
+
+          // Calculer le nombre de projets terminés
+          const completed = response.projects.filter(project => project.stat === 'termine');
+          setCompletedProjectsCount(completed.length);
+        } else {
+          console.error("Aucun projet trouvé.");
+        }
+      } catch (error) {
+        console.error("Erreur lors du chargement des projets:", error);
+      }
+    };
+    fetchProjects();
+
   }, []);
 
   return (
@@ -32,7 +58,7 @@ const About = () => {
         >
           {/* Section titre */}
           <div className="row mb-5">
-            <div className="col-md-6">
+            <div className="col-md-8">
               <h1 className="display-4 text-gradient fw-bold mb-4">À propos de moi</h1>
               <p className="lead text-muted">
                 Je suis un intégrateur web passionné, spécialisé dans la création de sites web modernes, performants et responsive. 
@@ -43,13 +69,43 @@ const About = () => {
                 Mon engagement envers la qualité et la satisfaction client fait de moi un partenaire de confiance pour vos projets web.
               </p>
             </div>
-            <div className="col-md-6 text-center d-none d-md-block">
-              <img
-                src={ProfileImg}
-                alt="Photo de profil"
-                className="img-fluid rounded-circle shadow-lg"
-                style={{ width: '250px', height: '250px' }}
-              />
+            <div className="col-md-4 text-center d-none d-md-block">
+            <div
+      className="wow fadeInUp animated"
+      data-wow-duration="1500ms"
+      data-wow-delay="400ms"
+      style={{ visibility: 'visible', animationDuration: '1500ms', animationDelay: '400ms', animationName: 'fadeInUp' }}
+    >
+      <div className="countbar-one">
+        <div className="countbar-one__single">
+          <a className="countbar-one__icon">
+            <img src={icon_projets}/>
+          </a>
+          <div className="countbar-one__number count-box counted">
+            <h4 className="count-text" data-stop="690" data-speed="1500">{completedProjectsCount}</h4>
+            <span>Projets terminés</span>
+          </div>
+        </div>
+        <div className="countbar-one__single">
+          <a className="countbar-one__icon">
+            <img src={icon_augm} />
+          </a>
+          <div className="countbar-one__number count-box counted">
+            <h4 className="count-text" data-stop="8600" data-speed="1500">0</h4>
+            <span>augmenter jusqu'à ce jour</span>
+          </div>
+        </div>
+        <div className="countbar-one__single">
+          <a className="countbar-one__icon">
+            <img src={icon_cls_st} />
+          </a>
+          <div className="countbar-one__number count-box counted">
+            <h4 className="count-text" data-stop="362" data-speed="1500">0</h4>
+            <span>clients satisfaits</span>
+          </div>
+        </div>
+      </div>
+    </div>
             </div>
           </div>
 
