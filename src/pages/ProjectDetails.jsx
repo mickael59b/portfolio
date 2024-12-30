@@ -45,7 +45,7 @@ const ProjectDetails = () => {
 
   if (!project) {
     return (
-      <div className="text-center my-5">
+      <div className="py-5 text-center my-5">
         <p>Projet introuvable.</p>
       </div>
     );
@@ -96,21 +96,22 @@ const ProjectDetails = () => {
               <div className="card-body">
                 <h4 className="text-center text-primary">Statistiques du Projet</h4>
                 <div className="row">
+                  {/* Statut du projet */}
                   <div className="col-6 mb-3">
-                    <h5>Ventes</h5>
-                    <p className="text-muted">2500+</p>
+                    <h5>Statut</h5>
+                    <p className="text-muted">{project.stat ? project.stat : 'Non spécifié'}</p>
                   </div>
-                  <div className="col-6 mb-3">
-                    <h5>Durée</h5>
-                    <p className="text-muted">2 Mois</p>
-                  </div>
+
+                  {/* Date de publication */}
                   <div className="col-6 mb-3">
                     <h5>Publié</h5>
-                    <p className="text-muted">{new Date(createdAt).toLocaleDateString()}</p>
+                    <p className="text-muted">{new Date(project.createdAt).toLocaleDateString()}</p>
                   </div>
+
+                  {/* Lien vers le projet */}
                   <div className="col-6 mb-3">
                     <h5>Lien</h5>
-                    <a href={link} target="_blank" rel="noopener noreferrer" className="btn btn-outline-primary w-100">
+                    <a href={project.link} target="_blank" rel="noopener noreferrer" className="btn btn-outline-primary w-100">
                       Voir le Projet
                     </a>
                   </div>

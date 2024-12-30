@@ -4,6 +4,9 @@ import { Helmet } from 'react-helmet'; // Importation de Helmet
 import { useAuth } from '../context/AuthContext'; // Importation de votre contexte Auth
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
+import visual from '../assets/images/pankaj-patel-1IW4HQuauSU-unsplash.webp';
+import git from '../assets/images/1_mtsk3fQ_BRemFidhkel3dA.webp';
+import figma from '../assets/images/team-nocoloco-YRUj8BENrVQ-unsplash.webp';
 import { loginClient } from '../services/apiClient'; // Importation de la fonction de connexion
 
 const Login = () => {
@@ -38,42 +41,45 @@ const Login = () => {
       <div className="container">
         <div className="row justify-content-center mt-5">
           <div className="col-xl-12">
-            <div className="row g-0">
+            <div className="row">
               <div className="col-md-5 offset-md-1 d-none d-md-inline-block">
-                <div className="position-relative mt-5 pt-5">
-                  <Swiper
+                <div className="position-relative pt-5">
+                <Swiper
                     spaceBetween={10}
                     slidesPerView={1}
                     loop={true}
-                    autoplay={{ delay: 3000 }}
+                    autoplay={{
+                      delay: 3000, // Le délai entre chaque transition (3 secondes)
+                      disableOnInteraction: false, // L'autoplay continue même après l'interaction de l'utilisateur (clic, swipe, etc.)
+                      pauseOnMouseEnter: true, // L'autoplay se met en pause lorsque la souris est au-dessus du Swiper
+                    }}
                   >
                     <SwiperSlide>
-                      <div className="swiper-slide-content">
-                        <div className="row text-center">
-                          <div className="col">
-                            <img src="assets/images/hero/saas1.jpg" alt="Slide 1" className="w-75" />
-                          </div>
-                        </div>
-                        <div className="row text-center my-4 pb-5">
-                          <div className="col">
-                            <h5 className="fw-medium fs-16">Manage your saas business with ease</h5>
-                            <p className="text-muted">Make your saas application stand out with high-quality landing page designed and developed by professionals.</p>
-                          </div>
+                      <div className="swiper-slide-content d-flex justify-content-center align-items-center">
+                        <div className="text-center text-white p-3" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', borderRadius: '10px' }}>
+                          <img src={visual} alt="Visual Studio Code" className="w-100 rounded" />
+                          <h5 className="fw-medium fs-16 mt-3">Visual Studio Code</h5>
+                          <p className="text-muted">Coding with the powerful and customizable Visual Studio Code editor.</p>
                         </div>
                       </div>
                     </SwiperSlide>
+
                     <SwiperSlide>
-                      <div className="swiper-slide-content">
-                        <div className="row text-center">
-                          <div className="col">
-                            <img src="assets/images/hero/saas2.jpg" alt="Slide 2" className="w-75" />
-                          </div>
+                      <div className="swiper-slide-content d-flex justify-content-center align-items-center">
+                        <div className="text-center text-white p-3" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', borderRadius: '10px' }}>
+                          <img src={git} alt="Git Version Control" className="w-100 rounded" />
+                          <h5 className="fw-medium fs-16 mt-3">Git Version Control</h5>
+                          <p className="text-muted">Efficient code management and collaboration with Git.</p>
                         </div>
-                        <div className="row text-center my-4 pb-5">
-                          <div className="col">
-                            <h5 className="fw-medium fs-16">Enhance your user experience</h5>
-                            <p className="text-muted">Offer a seamless and intuitive user experience with a visually appealing design.</p>
-                          </div>
+                      </div>
+                    </SwiperSlide>
+
+                    <SwiperSlide>
+                      <div className="swiper-slide-content d-flex justify-content-center align-items-center">
+                        <div className="text-center text-white p-3" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', borderRadius: '10px' }}>
+                          <img src={figma} alt="Figma" className="w-100 rounded" />
+                          <h5 className="fw-medium fs-16 mt-3">Figma</h5>
+                          <p className="text-muted">Designing interfaces and prototypes using Figma for seamless collaboration.</p>
                         </div>
                       </div>
                     </SwiperSlide>

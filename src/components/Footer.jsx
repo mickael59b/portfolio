@@ -37,7 +37,7 @@ const Footer = () => {
               <FooterLinks
                 title="Produits"
                 links={[
-                  { name: 'Thèmes', path: '/themes' },
+                  { name: 'Thèmes', path: 'https://acti-informatique.com/categories/Site-Templates/', newTab: true },
                   { name: 'Templates', path: '/templates' },
                   { name: 'UI Kits', path: '/ui-kits' },
                 ]}
@@ -45,16 +45,16 @@ const Footer = () => {
               <FooterLinks
                 title="Ressources"
                 links={[
-                  { name: 'Documentation', path: '/documentation' },
+                  { name: 'Documentation', path: 'https://doc.acti-informatique.com/', newTab:true },
                   { name: 'Tutoriels', path: '/tutoriels' },
-                  { name: 'Blog', path: '/blog' },
+                  { name: 'Blog', path: 'https://acti-informatique.com/blog/', newTab: true },
                 ]}
               />
               <FooterLinks
                 title="Entreprise"
                 links={[
                   { name: 'À propos', path: '/about' }, // Remapping explicit
-                  { name: 'Carrières', path: '/careers' },
+                  { name: 'Carrières', path: 'https://acti-informatique.com/recrutement/', newTab: true },
                   { name: 'Contact', path: '/contact' },
                 ]}
               />
@@ -76,9 +76,17 @@ const FooterLinks = ({ title, links }) => (
   <div className="col-md-4 mb-3">
     <h6 className="text-uppercase-expanded text-xs mb-4">{title}</h6>
     <ul className="list-unstyled mb-0">
-      {links.map(({ name, path }, index) => (
+      {links.map(({ name, path, newTab }, index) => (
         <li key={index} className="mb-2">
-          <Link to={path}>{name}</Link>
+          {path.startsWith('http') ? (
+            <a href={path} target={newTab ? '_blank' : '_self'} rel={newTab ? 'noopener noreferrer' : ''}>
+              {name}
+            </a>
+          ) : (
+            <Link to={path} target={newTab ? '_blank' : '_self'} rel={newTab ? 'noopener noreferrer' : ''}>
+              {name}
+            </Link>
+          )}
         </li>
       ))}
     </ul>
