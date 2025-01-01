@@ -1,12 +1,9 @@
 section, .section {
-  color: var(--default-color);
-  background-color: var(--background-color);
   padding-bottom: 80px;
   scroll-margin-top: 90px;
   overflow: clip;
 }
 a {
-  color: var(--bs-link-color);
   text-decoration: none !important;
 }
 .avatar-md {
@@ -17,12 +14,6 @@ a {
   position: absolute;
   top:74px;
   right:0;
-}
-.cookie-bar {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    z-index: 1000;
 }
 .text-gradient {
   background: linear-gradient(to right, #6a11cb, #2575fc);

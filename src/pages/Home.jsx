@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { useTypewriter, Cursor } from 'react-simple-typewriter'; // Importation du composant Typewriter
